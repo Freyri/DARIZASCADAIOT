@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>HMI - Sistema</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #333;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ========= LOGIN ========= */
+#loginScreen {
+  text-align: center;
+}
+
+#loginBox {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 320px;
+  background: #fafafa;
+  box-shadow: 0 0 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#loginLogo {
+  width: 320px;
+  height: 230px;
+  margin-bottom: 15px;
+}
+
+#loginLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#loginBox input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+}
+
+#loginBox button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 10px;
+  background: #22a6b3;
+  color: white;
+  font-size: 1.1em;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+#loginBox button:hover { background: #0984e3; }
+
+/* ========= PANTALLAS ========= */
+.screen {
+  display: none;
+  width: 100%;
+  height: 100vh;
+  padding-bottom: 90px; /* espacio para el menú */
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ========= PANTALLA PRINCIPAL ========= */
+#mainScreen {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  padding-bottom: 90px;
+  box-sizing: border-box;
+}
+
+#hmiContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+#logoContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+
+#logoContainer img {
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ========= MENÚ FIJO ========== */
+#navMenu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  box-sizing: border-box; /* <<< hace bordes simétricos */
+  visibility: hidden; /* OCULTO EN LOGIN */
+}
+
+#navMenu button {
+  width: calc(19% - 25px); /* 5 botones → 20% cada uno */
+  padding: 14px 0;
+  background: #0f62fe;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 1.6em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#navMenu button:hover {
+  background: #3d7dff;
+}
+/* Botones abajo del tanque */
+.tanqueBox button {
+  display: block;
+  margin-top: 5px;
+  width: 90%;  /* ocupa casi todo el ancho del tanque */
+}
+#esquemaContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+#esquemaImg {
+  width: 95vw;        /* tamaño en PC */
+  max-width: 1500px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* RESPONSIVO PARA MÓVIL */
+@media (max-width: 768px) {
+  #esquemaImg {
+    width: 95vw;      /* ocupa casi toda la pantalla */
+    max-width: none;
+  }
+}
+
+.textoProcesoBox {
+  position: absolute;
+
+  display: flex;
+  justify-content: center;    /* centra horizontal */
+  align-items: center;        /* centra vertical */
+
+  padding: 0.5vw 1vw;
+
+  background: #0f62fe;
+  border: 0.15vw solid #0a4ec4;
+  border-radius: 0.3vw;
+
+  box-shadow: 0 0 0.6vw rgba(0,0,0,0.25);
+
+  white-space: normal;        /* 👈 ahora sí permite multilinea */
+  text-align: center;         /* 👈 centra cada línea */
+}
+.textoProceso {
+  font-size: 1.2vw;
+  color: white;
+  font-weight: bold;
+  margin: 0;
+}
+
+.textoProcesoBox2 {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* 👈 CENTRA verticalmente */
+  align-items: flex-start;
+
+  width: 28vw;
+  height: 2.4vw;             /* 👈 un poquito más alto para que respire */
+
+  padding: 12px 10px;        /* 👈 más espacio uniforme arriba/abajo */
+  background: #C2F1FA;
+  border: 1px solid #000000;
+  border-radius: 3px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.25);
+}
+
+
+.textoProceso2 {
+  font-size: 1.2vw;
+  color: black;
+  text-align: left;
+  font-weight: bold;
+  margin: 0;
+
+  display: flex;
+  justify-content: space-between; 
+  width: 96%; /* Ajusta la separación automáticamente */
+}
+
+
+
+</style>
+</head>
+<body>
+<!-- ========== LOGIN ========== -->
+<div id="loginScreen">
+  <div id="loginBox">
+    <div id="loginLogo">
+      <img src="logo.jpg" alt="Logo" />
+    </div>
+
+    <h2>Ingresar</h2>
+    <input id="usuario" type="text" placeholder="Usuario">
+    <input id="password" type="password" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <p id="mensaje" style="color:red; margin-top:10px;"></p>
+  </div>
+</div>
+
+<!-- ========== PANTALLA PRINCIPAL ========== -->
+<div id="mainScreen" class="screen">
+  <div id="hmiContainer">
+    <div id="logoContainer">
+      <img src="logo.jpg" alt="LOGO">
+    </div>
+  </div>
+</div>
+
+<!-- ========== OTRAS PANTALLAS ========== -->
+
+<div id="procesoScreen" class="screen">
+  <!-- IMÁGENES ESTÁTICAS -->
+  <div id="esquemaContainer">
+      <img src="esquema.PNG" id="esquemaImg">
+  </div>
+
+  <!-- CUADRO DE TEXTO -->
+
+  <div class="textoProcesoBox" style="top: 43%; left: 24%;">
+      <p class="textoProceso">MODO DE TRABAJO</p>
+  </div>
+
+  <div class="textoProcesoBox" style="top: 43%; left: 76%;">
+      <p class="textoProceso">BOMBA DE SUMINISTRO</p>
+  </div>
+</div>
+
+<div id="monitoreoScreen" class="screen">
+  <div class="textoProcesoBox" style="top: 3%; left: 16%;">
+     <p class="textoProceso">VARIADOR DE BOMBA<br>SUMERGIBLE</p>
+  </div>
+
+  <div class="textoProcesoBox" style="top: 3%; left: 67.9%;">
+     <p class="textoProceso">VARIADOR DE BOMBAS<br>DE SUMINISTRO</p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 14%; left: 8.8%;">
+     <p class="textoProceso2">ESTADO:</p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 26%; left: 8.8%;">
+    <p class="textoProceso2">
+      <span>POTENCIA:</span>
+      <span>KW</span>
+    </p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 38%; left: 8.8%;">
+    <p class="textoProceso2">
+      <span>CORRIENTE:</span>
+      <span>A</span>
+    </p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 50%; left: 8.8%;">
+    <p class="textoProceso2">
+      <span>VOLTAJE:</span>
+      <span>V</span>
+    </p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 62%; left: 8.8%;">
+    <p class="textoProceso2">
+      <span>FRECUENCIA:</span>
+      <span>HZ</span>
+    </p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 14%; left: 60.8%;">
+     <p class="textoProceso2">ESTADO:</p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 26%; left: 60.8%;">
+    <p class="textoProceso2">
+      <span>POTENCIA:</span>
+      <span>KW</span>
+    </p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 38%; left: 60.8%;">
+    <p class="textoProceso2">
+      <span>CORRIENTE:</span>
+      <span>A</span>
+    </p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 50%; left: 60.8%;">
+    <p class="textoProceso2">
+      <span>VOLTAJE:</span>
+      <span>V</span>
+    </p>
+  </div>
+  <div class="textoProcesoBox2" style="top: 62%; left: 60.8%;">
+    <p class="textoProceso2">
+      <span>FRECUENCIA:</span>
+      <span>HZ</span>
+    </p>
+  </div>
+</div>
+
+<div id="parametrosScreen" class="screen">
+  <h1>Pantalla PARAMETROS</h1>
+</div>
+
+<div id="diagnosticoScreen" class="screen">
+  <h1>Pantalla DIAGNOSTICO</h1>
+</div>
+
+<!-- ========== MENÚ FIJO ========== -->
+<div id="navMenu">
+  <button onclick="showScreen('mainScreen')">PRINCIPAL</button>
+  <button onclick="showScreen('procesoScreen')">PROCESO</button>
+  <button onclick="showScreen('monitoreoScreen')">MONITOREO</button>
+  <button onclick="showScreen('parametrosScreen')">PARAMETROS</button>
+  <button onclick="showScreen('diagnosticoScreen')">DIAGNOSTICO</button>
+</div>
+
+<script>
+function login() {
+  const user = document.getElementById("usuario").value.trim();
+  const pass = document.getElementById("password").value.trim();
+
+  if (user === "dariza2025" && pass === "dariza2025iot") {
+
+      activarPantallaCompleta(); // <<<<<<<<<< FULL SCREEN
+
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("navMenu").style.visibility = "visible";
+      showScreen("mainScreen");
+
+  } else {
+      document.getElementById("mensaje").innerText = "Credenciales incorrectas";
+  }
+}
+
+function showScreen(screenId) {
+  const screens = [
+    "mainScreen",
+    "procesoScreen",
+    "monitoreoScreen",
+    "parametrosScreen",
+    "diagnosticoScreen"
+  ];
+
+  screens.forEach(id => {
+    document.getElementById(id).style.display = "none";
+  });
+
+  document.getElementById(screenId).style.display = "flex";
+}
+function llenarTanque(num) {
+  document.getElementById("tanque" + num + "Img").src = "lleno.PNG";
+}
+
+function vaciarTanque(num) {
+  document.getElementById("tanque" + num + "Img").src = "vacio.PNG";
+}
+function activarPantallaCompleta() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) elem.requestFullscreen();
+  else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+  else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+}
+
+</script>
+
+</body>
+</html>
