@@ -135,13 +135,13 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #fff;
+  background: transparent;   /* 👈 ahora es transparente */
   padding: 8px;
   display: flex;
   justify-content: center;
   gap: 25px;
-  box-sizing: border-box; /* <<< hace bordes simétricos */
-  visibility: hidden; /* OCULTO EN LOGIN */
+  box-sizing: border-box; 
+  visibility: hidden;
 }
 
 #navMenu button {
@@ -476,7 +476,7 @@ input[type=number] {
    <input id="inputFreqProceso" type="number" min="0" max="60" step="0.01"
            style="width: 100%; height: 100%; font-size:1.2vw; font-weight:bold; text-align:center; border:none; background: yellow; -moz-appearance:textfield; -webkit-appearance:none;">
   </div>
-  <div class="textoProcesoBoxTransparente" style="top: 74%; left: 32%;">
+  <div class="textoProcesoBoxTransparente" style="top: 72%; left: 32%;">
      <p class="textoProcesoTransparente">HZ</p>
    </div>
 </div>
@@ -624,44 +624,44 @@ client.on("message", (topic, message) => {
 <script>
 const topicControl = "lurin/factory/bombas"; 
 const inputFreqProceso = document.getElementById("inputFreqProceso");
-// Formatear siempre a 2 decimales al perder foco
+
+// Solo limitar mientras escribes, no redondear
+inputFreqProceso.addEventListener("input", () => {
+    let valor = parseFloat(inputFreqProceso.value);
+    if (isNaN(valor)) return; // mientras escribes, no hacer nada
+    valor = Math.min(60, Math.max(0, valor)); // limitar entre 0 y 60
+});
+
+// Al perder foco, formatear y enviar por MQTT
 inputFreqProceso.addEventListener("blur", () => {
     let valor = parseFloat(inputFreqProceso.value);
     if (isNaN(valor)) valor = 0;
-    valor = Math.min(60, Math.max(0, valor)); // limita entre 0 y 60
-    inputFreqProceso.value = valor.toFixed(2); // siempre 2 decimales
-});
-
-let sincronizadoProceso = false; // solo sincroniza 1 vez
-
-// MQTT ya lo tienes conectado con 'client'
-client.on("message", (topic, message) => {
-  try {
-    const data = JSON.parse(message.toString());
-
-    // Solo sincroniza 1 vez al entrar a proceso
-    const hmi_freq = (data.H105 / 100).toFixed(2);
-    if (!sincronizadoProceso) {
-        sincronizadoProceso = true;
-        inputFreqProceso.value = hmi_freq;
-        console.log("🔄 Sincronizado FRECUENCIA PROCESO:", hmi_freq, "Hz");
-    }
-
-  } catch(e) {
-    console.error("Error parseando JSON proceso:", e);
-  }
-});
-
-inputFreqProceso.addEventListener("input", () => {
-    let valor = parseFloat(inputFreqProceso.value);
-    if(isNaN(valor)) valor = 0;
     valor = Math.min(60, Math.max(0, valor));
-    inputFreqProceso.value = valor.toFixed(2);
+    inputFreqProceso.value = valor.toFixed(2); // formateo a 2 decimales
 
-    if(client.connected) client.publish(topicControl, valor.toFixed(2));
+    if(client.connected) {
+        client.publish(topicControl, valor.toFixed(2));
+        console.log("📤 FRECUENCIA enviada:", valor.toFixed(2));
+    }
 });
 
+// Sincronizar inicialmente desde MQTT al entrar a pantalla PROCESO
+let sincronizadoProceso = false;
+client.on("message", (topic, message) => {
+    try {
+        const data = JSON.parse(message.toString());
+        const hmi_freq = (data.H105 / 100).toFixed(2);
+        if (!sincronizadoProceso) {
+            sincronizadoProceso = true;
+            inputFreqProceso.value = hmi_freq;
+            console.log("🔄 Sincronizado FRECUENCIA PROCESO:", hmi_freq, "Hz");
+        }
+    } catch(e) {
+        console.error("Error parseando JSON proceso:", e);
+    }
+});
 </script>
+
 </body>
 </html>
 
