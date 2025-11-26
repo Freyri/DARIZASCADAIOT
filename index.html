@@ -382,8 +382,8 @@ body {
       <p class="textoProceso">BOMBA DE SUMINISTRO</p>
   </div>
 </div>
-
 <div id="monitoreoScreen" class="screen">
+  <!-- TITULOS DE VARIADORES -->
   <div class="textoProcesoBox" style="top: 3%; left: 16%;">
      <p class="textoProceso">VARIADOR DE BOMBA<br>SUMERGIBLE</p>
   </div>
@@ -391,58 +391,76 @@ body {
   <div class="textoProcesoBox" style="top: 3%; left: 67.9%;">
      <p class="textoProceso">VARIADOR DE BOMBAS<br>DE SUMINISTRO</p>
   </div>
+
+  <!-- PRIMER BLOQUE DE MONITOREO -->
   <div class="textoProcesoBox2" style="top: 14%; left: 8.8%;">
-     <p class="textoProceso2">ESTADO:</p>
+     <p class="textoProceso2">
+       <span>ESTADO:</span>
+       <span id="estadoValor">DESCONOCIDO</span>
+     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 26%; left: 8.8%;">
     <p class="textoProceso2">
       <span>POTENCIA:</span>
-      <span>KW</span>
+      <span id="potenciaValor">KW</span>
     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 38%; left: 8.8%;">
     <p class="textoProceso2">
       <span>CORRIENTE:</span>
-      <span>A</span>
+      <span id="corrienteValor">A</span>
     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 50%; left: 8.8%;">
     <p class="textoProceso2">
       <span>VOLTAJE:</span>
-      <span>V</span>
+      <span id="voltajeValor">V</span>
     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 62%; left: 8.8%;">
     <p class="textoProceso2">
       <span>FRECUENCIA:</span>
-      <span>HZ</span>
+      <span id="frecuenciaValor">HZ</span>
     </p>
   </div>
+
+  <!-- SEGUNDO BLOQUE DE MONITOREO (SI QUIERES) -->
   <div class="textoProcesoBox2" style="top: 14%; left: 60.8%;">
-     <p class="textoProceso2">ESTADO:</p>
+     <p class="textoProceso2">
+       <span>ESTADO:</span>
+       <span id="estadoValor2">DESCONOCIDO</span>
+     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 26%; left: 60.8%;">
     <p class="textoProceso2">
       <span>POTENCIA:</span>
-      <span>KW</span>
+      <span id="potenciaValor2">%</span>
     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 38%; left: 60.8%;">
     <p class="textoProceso2">
       <span>CORRIENTE:</span>
-      <span>A</span>
+      <span id="corrienteValor2">A</span>
     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 50%; left: 60.8%;">
     <p class="textoProceso2">
       <span>VOLTAJE:</span>
-      <span>V</span>
+      <span id="voltajeValor2">V</span>
     </p>
   </div>
+
   <div class="textoProcesoBox2" style="top: 62%; left: 60.8%;">
     <p class="textoProceso2">
       <span>FRECUENCIA:</span>
-      <span>HZ</span>
+      <span id="frecuenciaValor2">HZ</span>
     </p>
   </div>
 </div>
@@ -547,6 +565,45 @@ function activarPantallaCompleta() {
   else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
 }
 
+</script>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script>
+const topicStatus  = "lurin/factory/bombas/status"; 
+const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
+
+// IDs de los spans
+const estadoSpan = document.getElementById("estadoValor");
+const potenciaSpan = document.getElementById("potenciaValor");
+const corrienteSpan = document.getElementById("corrienteValor");
+const voltajeSpan = document.getElementById("voltajeValor");
+const frecuenciaSpan = document.getElementById("frecuenciaValor");
+
+client.on("connect", () => {
+  console.log("Conectado a MQTT");
+  client.subscribe(topicStatus);
+});
+
+client.on("message", (topic, message) => {
+  try {
+    const data = JSON.parse(message.toString());
+
+    const freq = (data.H100 / 100).toFixed(2);
+    const volt = data.H101.toFixed(0);
+    const amp  = (data.H102 / 100).toFixed(2);
+    const pot  = (data.H103 / 10).toFixed(2);
+    const status = data.Status || "DESCONOCIDO";
+
+    // Actualizar los valores en pantalla
+    estadoSpan.innerText = status;
+    potenciaSpan.innerText = pot + " kW";
+    corrienteSpan.innerText = amp + " A";
+    voltajeSpan.innerText = volt + " V";
+    frecuenciaSpan.innerText = freq + " Hz";
+
+  } catch(e) {
+    console.error("Error parseando JSON:", e);
+  }
+});
 </script>
 
 </body>
