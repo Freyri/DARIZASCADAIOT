@@ -335,6 +335,15 @@ body {
   margin: 0;
   line-height: 1.2;
 }
+/* Quitar flechas de los inputs type=number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
 
 </style>
 </head>
@@ -463,6 +472,13 @@ body {
       <span id="frecuenciaValor2">HZ</span>
     </p>
   </div>
+  <div class="textoProcesoBox2" style="top: 76%; left: 8.8%; background: yellow; border: 1px solid #000;">
+   <input id="inputFreqProceso" type="number" min="0" max="60" step="0.01"
+           style="width: 100%; height: 100%; font-size:1.2vw; font-weight:bold; text-align:center; border:none; background: yellow; -moz-appearance:textfield; -webkit-appearance:none;">
+  </div>
+  <div class="textoProcesoBoxTransparente" style="top: 74%; left: 32%;">
+     <p class="textoProcesoTransparente">HZ</p>
+   </div>
 </div>
 
 <div id="parametrosScreen" class="screen">
@@ -605,7 +621,47 @@ client.on("message", (topic, message) => {
   }
 });
 </script>
+<script>
+const topicControl = "lurin/factory/bombas"; 
+const inputFreqProceso = document.getElementById("inputFreqProceso");
+// Formatear siempre a 2 decimales al perder foco
+inputFreqProceso.addEventListener("blur", () => {
+    let valor = parseFloat(inputFreqProceso.value);
+    if (isNaN(valor)) valor = 0;
+    valor = Math.min(60, Math.max(0, valor)); // limita entre 0 y 60
+    inputFreqProceso.value = valor.toFixed(2); // siempre 2 decimales
+});
 
+let sincronizadoProceso = false; // solo sincroniza 1 vez
+
+// MQTT ya lo tienes conectado con 'client'
+client.on("message", (topic, message) => {
+  try {
+    const data = JSON.parse(message.toString());
+
+    // Solo sincroniza 1 vez al entrar a proceso
+    const hmi_freq = (data.H105 / 100).toFixed(2);
+    if (!sincronizadoProceso) {
+        sincronizadoProceso = true;
+        inputFreqProceso.value = hmi_freq;
+        console.log("🔄 Sincronizado FRECUENCIA PROCESO:", hmi_freq, "Hz");
+    }
+
+  } catch(e) {
+    console.error("Error parseando JSON proceso:", e);
+  }
+});
+
+inputFreqProceso.addEventListener("input", () => {
+    let valor = parseFloat(inputFreqProceso.value);
+    if(isNaN(valor)) valor = 0;
+    valor = Math.min(60, Math.max(0, valor));
+    inputFreqProceso.value = valor.toFixed(2);
+
+    if(client.connected) client.publish(topicControl, valor.toFixed(2));
+});
+
+</script>
 </body>
 </html>
 
