@@ -308,6 +308,34 @@ body {
   justify-content: space-between; 
   width: 96%; /* Ajusta la separación automáticamente */
 }
+/* ===== CUADRO TRANSPARENTE SOLO TEXTO ===== */
+.textoProcesoBoxTransparente {
+  position: absolute;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  padding: 0.5vw 1vw;
+
+  background: transparent;      /* SIN FONDO */
+  border: none;                 /* SIN BORDE */
+  box-shadow: none;             /* SIN SOMBRA */
+
+  white-space: normal;
+  text-align: left;
+
+  width: 34vw;                  /* igual que textoProcesoBoxGrande */
+  height: 6vw;                  /* igual que textoProcesoBoxGrande */
+}
+
+.textoProcesoTransparente {
+  font-size: 2vw;               /* igual que textoProcesoGrande */
+  color: black;                 /* color del texto */
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.2;
+}
+
 </style>
 </head>
 <body>
@@ -436,12 +464,28 @@ body {
 
   <div class="diagnosticoBox">
      <p class="diagnosticoTitulo">ENTRADAS</p>
-     <!-- Aquí luego ponemos X0, X1, X2 si quieres -->
+     <div class="textoProcesoBoxTransparente" style="top: 17%; left: 16%;">
+       <p class="textoProcesoTransparente">BOYA 1</p>
+     </div>
+     <div class="textoProcesoBoxTransparente" style="top: 34%; left: 16%;">
+       <p class="textoProcesoTransparente">BOYA 2</p>
+     </div>
+     <div class="textoProcesoBoxTransparente" style="top: 51%; left: 16%;">
+       <p class="textoProcesoTransparente">SOLICITUD (BOYA 3)</p>
+     </div>
+     <div class="textoProcesoBoxTransparente" style="top: 68%; left: 16%;">
+       <p class="textoProcesoTransparente">PARADA DE EMERGENCIA</p>
+     </div>
   </div>
 
   <div class="diagnosticoBox">
      <p class="diagnosticoTitulo">SALIDAS</p>
-     <!-- Aquí luego ponemos Y0, Y1 si quieres -->
+     <div class="textoProcesoBoxTransparente" style="top: 17%; left: 62%;">
+       <p class="textoProcesoTransparente">BOMBA IZQUIERDA</p>
+     </div>
+     <div class="textoProcesoBoxTransparente" style="top: 34%; left: 62%;">
+       <p class="textoProcesoTransparente">BOMBA DERECHA</p>
+     </div>
   </div>
 
 </div>
