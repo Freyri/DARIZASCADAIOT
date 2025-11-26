@@ -229,6 +229,35 @@ body {
   font-weight: bold;
   margin: 0;
 }
+/* === CUADRO ESPECIAL MÁS GRANDE (SOLO PARA PARAMETROS) === */
+.textoProcesoBoxGrande {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0.5vw 1vw;
+
+  background: #06E3E8;
+  border: 1px solid #000000;
+  border-radius: 0.5vw;
+
+  box-shadow: 0 0 1vw rgba(0,0,0,0.25);
+
+  white-space: normal;
+  text-align: center;
+
+  width: 34vw;   /* 👈 MÁS ANCHO */
+  height: 6vw;   /* 👈 MÁS ALTO */
+}
+
+.textoProcesoGrande {
+  font-size: 2vw;  /* 👈 LETRA MÁS GRANDE */
+  color: black;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.2;
+}
 
 .textoProcesoBox2 {
   position: absolute;
@@ -393,8 +422,14 @@ body {
 </div>
 
 <div id="parametrosScreen" class="screen">
-  <div class="textoProcesoBox" style="top: 3%; left: 67.9%;">
-     <p class="textoProceso">RETARDO DE TOLERANCIA<br>DE GARANTÍA DE PRESIÓN</p>
+  <div class="textoProcesoBoxGrande" style="top: 15%; left: 20%;">
+       <p class="textoProcesoGrande">RETARDO DE TOLERANCIA<br>DE GARANTÍA DE PRESIÓN</p>
+  </div>
+  <div class="textoProcesoBoxGrande" style="top: 40%; left: 20%;">
+       <p class="textoProcesoGrande">PRESIÓN MÍNIMA DE<br>SUMINISTRO</p>
+  </div>
+  <div class="textoProcesoBoxGrande" style="top: 65%; left: 20%;">
+       <p class="textoProcesoGrande">CANTIDAD DE REINTENTOS<br>POR FALTA DE PRESIÓN</p>
   </div>
 </div>
 
