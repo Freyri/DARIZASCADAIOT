@@ -18,11 +18,6 @@
   display: block;
 }
 
-
-#fullscreenBtn:hover {
-  background: #3d7dff;
-}
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -185,7 +180,6 @@ body {
   object-fit: fill; /* ⬅️ estira sin respetar proporción */
 }
 
-
 /* RESPONSIVO PARA MÓVIL */
 @media (max-width: 768px) {
   #esquemaImg {
@@ -240,7 +234,6 @@ body {
   padding: 12px 10px;        /* 👈 más espacio uniforme arriba/abajo */
   background: #C2F1FA;
   border: 1px solid #000000;
-  border-radius: 3px;
   box-shadow: 0 0 6px rgba(0,0,0,0.25);
 }
 
@@ -257,42 +250,12 @@ body {
   width: 96%; /* Ajusta la separación automáticamente */
 }
 
-</style>
-</head>
-<body>
-<button id="fullscreenBtn" onclick="activarPantallaCompleta()">⛶</button>
-<!-- ========== LOGIN ========== -->
-<div id="loginScreen">
-  <div id="loginBox">
-    <div id="loginLogo">
-      <img src="logo.jpg" alt="Logo" />
-    </div>
-
-    <h2>Ingresar</h2>
-    <input id="usuario" type="text" placeholder="Usuario">
-    <input id="password" type="password" placeholder="Contraseña">
-    <button onclick="login()">Entrar</button>
-    <p id="mensaje" style="color:red; margin-top:10px;"></p>
-  </div>
-</div>
-
-<!-- ========== PANTALLA PRINCIPAL ========== -->
-<div id="mainScreen" class="screen">
-  <div id="hmiContainer">
-    <div id="logoContainer">
-      <img src="logo.jpg" alt="LOGO">
-    </div>
-  </div>
-</div>
-
-<!-- ========== OTRAS PANTALLAS ========== -->
-
-<div id="procesoScreen" class="screen">
-  <!-- IMÁGENES ESTÁTICAS -->
-  <div id="esquemaContainer">
-      <img src="esquema.PNG" id="esquemaImg">
-  </div>
-
+.diagContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   <!-- CUADRO DE TEXTO -->
 
   <div class="textoProcesoBox" style="top: 43%; left: 24%;">
