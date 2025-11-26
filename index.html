@@ -2,9 +2,27 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>HMI - Sistema</title>
+<title>DARIZA SCADA IOT </title>
 
 <style>
+#fullscreenBtn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: transparent;   /* 👈 sin fondo */
+  color: #0f62fe;            /* 👈 solo icono azul */
+  border: none;
+  font-size: 2rem;           /* 👈 icono más bonito */
+  cursor: pointer;
+  z-index: 9999;
+  display: block;
+}
+
+
+#fullscreenBtn:hover {
+  background: #3d7dff;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -158,20 +176,25 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 10px;
+  margin-top: 0%;
 }
 #esquemaImg {
-  width: 95vw;        /* tamaño en PC */
+  width: 95vw;
   max-width: 1500px;
-  height: auto;
-  object-fit: contain;
+  height: 92vh; /* ⬅️ MÁS ALTO QUE TU PANTALLA */
+  object-fit: fill; /* ⬅️ estira sin respetar proporción */
 }
+
 
 /* RESPONSIVO PARA MÓVIL */
 @media (max-width: 768px) {
   #esquemaImg {
-    width: 90vw;      /* ocupa casi toda la pantalla */
+    width: 100vw;      /* ocupa casi toda la pantalla */
+    height: 92vh; /* ⬅️ MÁS ALTO QUE TU PANTALLA */
     max-width: none;
+  }
+  #esquemaContainer {
+    padding-top: 5%;
   }
   #navMenu button {
     font-size: 1em;
@@ -237,6 +260,7 @@ body {
 </style>
 </head>
 <body>
+<button id="fullscreenBtn" onclick="activarPantallaCompleta()">⛶</button>
 <!-- ========== LOGIN ========== -->
 <div id="loginScreen">
   <div id="loginBox">
@@ -412,4 +436,3 @@ function activarPantallaCompleta() {
 
 </body>
 </html>
-
