@@ -179,7 +179,27 @@ body {
   height: 92vh; /* ⬅️ MÁS ALTO QUE TU PANTALLA */
   object-fit: fill; /* ⬅️ estira sin respetar proporción */
 }
+/* === CUADROS CELESTES DIAGNÓSTICO === */
+.diagnosticoBox {
+  width: 40vw;                  /* ancho relativo */
+  height: 73vh;                 /* alto relativo */
+  background: #b5dcff;          /* celeste estilo HMI */
+  border: 1px solid #000;       /* borde negro */
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+  padding: 15px;
+  margin-top: 2.4%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.diagnosticoTitulo {
+  font-size: 2.2vw;
+  color: #0040ff;
+  font-weight: bold;
+  margin-top: 3px;   /* 👈 SUBE EL TEXTO */
+}
 /* RESPONSIVO PARA MÓVIL */
 @media (max-width: 768px) {
   #esquemaImg {
@@ -288,28 +308,6 @@ body {
   justify-content: space-between; 
   width: 96%; /* Ajusta la separación automáticamente */
 }
-/* === CUADROS CELESTES DIAGNÓSTICO === */
-.diagnosticoBox {
-  width: 40vw;                  /* ancho relativo */
-  height: 73vh;                 /* alto relativo */
-  background: #b5dcff;          /* celeste estilo HMI */
-  border: 1px solid #000;       /* borde negro */
-  border-radius: 3px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.25);
-  padding: 15px;
-  margin-top: 2.4%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.diagnosticoTitulo {
-  font-size: 2.2vw;
-  color: #0040ff;
-  font-weight: bold;
-  margin-top: 3px;   /* 👈 SUBE EL TEXTO */
-}
-
 </style>
 </head>
 <body>
@@ -509,3 +507,4 @@ function activarPantallaCompleta() {
 
 </body>
 </html>
+
