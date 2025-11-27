@@ -187,9 +187,9 @@ body {
 
 /* MÓVIL */
 @media screen and (max-width: 768px) {
-  #tanque1Img { top: 16%; left: 11%; width: 14%; height: 36%; }
-  #tanque2Img { top: 16%; left: 25%; width: 14%; height: 36%; }
-  #tanque3Img { top: 16%; left: 84%; width: 14%; height: 36%; }
+  #tanque1Img { top: 16%; left: 10.8%; width: 12.5%; height: 36%; }
+  #tanque2Img { top: 16%; left: 25.5%; width: 12.5%; height: 36%; }
+  #tanque3Img { top: 16%; left: 84%; width: 12.5%; height: 36%; }
 }
 
 #esquemaImg {
@@ -425,8 +425,8 @@ input[type=number] {
       <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute;">
       <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute;">
   </div>
-  <div id="rect5" class="rectangulo" style="top: 16%; left: 53%; width: 10%; height: 12%;">BOMBA 1</div>
-  <div id="rect6" class="rectangulo" style="top: 36%; left: 53%; width: 10%; height: 12%;">BOMBA 2</div>
+  <div id="rect7" class="rectangulo" style="top: 16%; left: 53%; width: 10%; height: 12%;">BOMBA 1</div>
+  <div id="rect8" class="rectangulo" style="top: 36%; left: 53%; width: 10%; height: 12%;">BOMBA 2</div>
   <!-- CUADROS DE TEXTO -->
   <div class="textoProcesoBox" style="top: 43%; left: 24%;">
       <p class="textoProceso">MODO DE TRABAJO</p>
@@ -759,6 +759,8 @@ client.on("message", (topic, message) => {
             // SALIDAS
             setRectColor("rect5", h304);
             setRectColor("rect6", h305);
+            setRectColor("rect7", h304);
+            setRectColor("rect8", h305);
             // ====== SINCRONIZAR INPUTS H308, H309, H310 SOLO UNA VEZ ======
             if (!sincronizadoIO) {
                 const hmi_retardopresion = (data.H308 / 10).toFixed(1);
