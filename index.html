@@ -240,12 +240,14 @@ body {
   .diagnosticoTitulo {
     font-size: 4vw; /* ajusta tamaño texto */
   }
-  .rectangulo {
-      width: 2%;
-      font-size: 1.5vw;
-  }
 }
-
+@media (max-width: 480px) {
+    .rectangulo {
+        width: 10%;       /* suficiente para verlo en pantalla pequeña */
+        min-width: 60px;  /* evita que sea demasiado pequeño */
+        font-size: 2vw;   /* texto visible */
+    }
+}
 .textoProcesoBox {
   position: absolute;
 
