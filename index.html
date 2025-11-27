@@ -217,6 +217,13 @@ body {
     transition: 0.3s ease;  
     position: absolute;     
 }
+@media (max-width: 480px) {
+    .rectangulo {
+        width: 4%;       /* suficiente para verlo en pantalla pequeña */
+        min-width: 10px;  /* evita que sea demasiado pequeño */
+        font-size: 2vw;   /* texto visible */
+    }
+}
 /* RESPONSIVO PARA MÓVIL */
 @media (max-width: 768px) {
   #esquemaImg {
@@ -240,13 +247,6 @@ body {
   .diagnosticoTitulo {
     font-size: 4vw; /* ajusta tamaño texto */
   }
-}
-@media (max-width: 480px) {
-    .rectangulo {
-        width: 10%;       /* suficiente para verlo en pantalla pequeña */
-        min-width: 60px;  /* evita que sea demasiado pequeño */
-        font-size: 2vw;   /* texto visible */
-    }
 }
 .textoProcesoBox {
   position: absolute;
@@ -779,7 +779,6 @@ inputFreq2Proceso.addEventListener("blur", () => {
     }
 });
 </script>
-
 </body>
 </html>
 
