@@ -200,6 +200,23 @@ body {
   font-weight: bold;
   margin-top: 3px;   /* 👈 SUBE EL TEXTO */
 }
+/* Rectángulo flotante y responsive */
+.rectangulo {
+    width: 3%;             
+    max-width: 100px;      
+    min-width: 100px;      
+    aspect-ratio: 1.5/1;   
+    background-color: red;    
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2%;     
+    font-size: 2vw;        
+    font-weight: bold;
+    transition: 0.3s ease;  
+    position: absolute;     
+}
 /* RESPONSIVO PARA MÓVIL */
 @media (max-width: 768px) {
   #esquemaImg {
@@ -222,6 +239,10 @@ body {
 
   .diagnosticoTitulo {
     font-size: 4vw; /* ajusta tamaño texto */
+  }
+  .rectangulo {
+      width: 5%;
+      font-size: 4vw;
   }
 }
 
@@ -505,6 +526,10 @@ input[type=number] {
 
   <div class="diagnosticoBox">
      <p class="diagnosticoTitulo">ENTRADAS</p>
+     <div id="rect1" class="rectangulo" style="top: 19%; left: 8%;">X0</div>
+     <div id="rect2" class="rectangulo" style="top: 36%; left: 8%;">X1</div>
+     <div id="rect3" class="rectangulo" style="top: 53%; left: 8%;">X2</div>
+     <div id="rect4" class="rectangulo" style="top: 70%; left: 8%;">X3</div>
      <div class="textoProcesoBoxTransparente" style="top: 17%; left: 16%;">
        <p class="textoProcesoTransparente">BOYA 1</p>
      </div>
@@ -521,6 +546,8 @@ input[type=number] {
 
   <div class="diagnosticoBox">
      <p class="diagnosticoTitulo">SALIDAS</p>
+     <div id="rect5" class="rectangulo" style="top: 19%; left: 53%;">Y0</div>
+     <div id="rect6" class="rectangulo" style="top: 36%; left: 53%;">Y1</div>
      <div class="textoProcesoBoxTransparente" style="top: 17%; left: 60%;">
        <p class="textoProcesoTransparente">BOMBA IZQUIERDA</p>
      </div>
@@ -726,8 +753,7 @@ inputFreq2Proceso.addEventListener("blur", () => {
 });
 </script>
 
-
-
 </body>
 </html>
+
 
