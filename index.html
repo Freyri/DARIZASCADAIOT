@@ -168,11 +168,30 @@ body {
 
 #esquemaContainer {
   position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 0%;
+  width: 95vw;
+  max-width: 1500px;
+  height: 92vh;
+  margin: 0 auto;
 }
+
+/* Tanques posicionados relativos al contenedor del esquema */
+#tanque1Img, #tanque2Img, #tanque3Img {
+  position: absolute;
+  display: none;
+}
+
+/* PC */
+#tanque1Img { top: 6.6%; left: 10%; width: 165px; height: 288.5px; }
+#tanque2Img { top: 6.6%; left: 24.8%; width: 165px; height: 288.5px; }
+#tanque3Img { top: 6.6%; left: 80%; width: 165px; height: 288.5px; }
+
+/* MÓVIL */
+@media screen and (max-width: 768px) {
+  #tanque1Img { top: 5%; left: 4%; width: 12%; height: 36%; }
+  #tanque2Img { top: 5%; left: 36%; width: 12%; height: 36%; }
+  #tanque3Img { top: 5%; left: 74%; width: 12%; height: 36%; }
+}
+
 #esquemaImg {
   width: 95vw;
   max-width: 1500px;
@@ -244,29 +263,6 @@ body {
     height: 10vh;
     font-size: 2.5vw;
   }
-}
-/* Contenedor relativo para que los top/left de los tanques funcionen */
-#procesoScreen {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-}
-/* PC */
-#tanque1Img, #tanque2Img, #tanque3Img {
-  width: 165px;
-  height: 288.5px;
-}
-
-/* Media query para móvil */
-@media screen and (max-width: 768px) {
-  #tanque1Img { left: 4%; top: 5%; }
-  #tanque2Img { left: 36%; top: 5%; }
-  #tanque3Img { left: 74%; top: 5%; }
-  #tanque1Img, #tanque2Img, #tanque3Img {
-    width: 12%;     /* ancho relativo a la pantalla */
-    height: 36%;    /* estira verticalmente */
-  }
-
 }
 
 .textoProcesoBox {
@@ -420,15 +416,16 @@ input[type=number] {
 <!-- ========== OTRAS PANTALLAS ========== -->
 
 <div id="procesoScreen" class="screen">
-  <!-- IMÁGENES ESTÁTICAS -->
+  <!-- Contenedor relativo del esquema -->
   <div id="esquemaContainer">
       <img src="esquema.PNG" id="esquemaImg">
+
+      <!-- TANQUES dentro del mismo contenedor -->
+      <img id="tanque1Img" src="lleno.PNG" style="display:none; position:absolute;">
+      <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute;">
+      <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute;">
   </div>
 
-  <!-- TANQUES -->
-  <img id="tanque1Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:12%;">
-  <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:26%;">
-  <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:78.6%;">
   <!-- CUADROS DE TEXTO -->
   <div class="textoProcesoBox" style="top: 43%; left: 24%;">
       <p class="textoProceso">MODO DE TRABAJO</p>
@@ -438,6 +435,7 @@ input[type=number] {
       <p class="textoProceso">BOMBA DE SUMINISTRO</p>
   </div>
 </div>
+
 
 <div id="monitoreoScreen" class="screen">
   <!-- TITULOS DE VARIADORES -->
