@@ -518,6 +518,26 @@ input[type=number] {
   <div class="textoProcesoBoxGrande" style="top: 65%; left: 20%;">
        <p class="textoProcesoGrande">CANTIDAD DE REINTENTOS<br>POR FALTA DE PRESIÓN</p>
   </div>
+  <div class="textoProcesoBoxGrande" style="top: 15%; left: 60%; background: #FFFF00; width: 12vw;">
+      <input id="inputRetardoPresion" type="number" min="0.0" max="10.0" step="0.1"
+             style="width: 100%; height: 100%; font-size:2vw; font-weight:bold; text-align:center; border:none; background:#FFFF00; -moz-appearance:textfield; -webkit-appearance:none;">
+  </div>
+
+  <div class="textoProcesoBoxGrande" style="top: 40%; left: 60%; background: #FFFF00; width: 12vw;">
+      <input id="inputPresionMinima" type="number" min="0.00" max="10.00" step="0.01"
+             style="width: 100%; height: 100%; font-size:2vw; font-weight:bold; text-align:center; border:none; background:#FFFF00; -moz-appearance:textfield; -webkit-appearance:none;">
+  </div>
+
+  <div class="textoProcesoBoxGrande" style="top: 65%; left: 60%; background: #FFFF00; width: 12vw;">
+      <input id="inputReintentos" type="number" min="1" max="10" step="1"
+             style="width: 100%; height: 100%; font-size:2vw; font-weight:bold; text-align:center; border:none; background:#FFFF00; -moz-appearance:textfield; -webkit-appearance:none;">
+  </div>
+  <div class="textoProcesoBoxTransparente" style="top: 15%; left: 69%;">
+     <p class="textoProcesoTransparente">s</p>
+   </div>
+  <div class="textoProcesoBoxTransparente" style="top: 40%; left: 69%;">
+     <p class="textoProcesoTransparente">bar</p>
+   </div>
 </div>
 
 <div id="diagnosticoScreen" class="screen" 
@@ -600,13 +620,6 @@ function showScreen(screenId) {
 
   document.getElementById(screenId).style.display = "flex";
 }
-function llenarTanque(num) {
-  document.getElementById("tanque" + num + "Img").src = "lleno.PNG";
-}
-
-function vaciarTanque(num) {
-  document.getElementById("tanque" + num + "Img").src = "vacio.PNG";
-}
 function activarPantallaCompleta() {
   const elem = document.documentElement;
   if (elem.requestFullscreen) elem.requestFullscreen();
@@ -617,7 +630,8 @@ function activarPantallaCompleta() {
 </script>
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <script>
-const topicStatus  = "lurin/factory/bombas/status"; 
+const topicVar = "lurin/factory/bombas/var";
+const topicIO  = "lurin/factory/bombas/io";
 const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
 
 // ====== SPANS VARIADOR 1 ======
@@ -635,78 +649,96 @@ const voltaje2Span = document.getElementById("voltajeValor2");
 const frecuencia2Span = document.getElementById("frecuenciaValor2");
 
 client.on("connect", () => {
-  console.log("Conectado a MQTT");
-  client.subscribe(topicStatus);
+    console.log("Conectado a MQTT");
+    client.subscribe(topicVar);
+    client.subscribe(topicIO);  // Suscribirse al topic de I/O
 });
 
-let sincronizadoProceso = false;
+let sincronizadoProceso = false; // para las frecuencias
+let sincronizadoIO = false;      // para H308, H309, H310
 
 client.on("message", (topic, message) => {
     try {
         const data = JSON.parse(message.toString());
 
-        // ====== VARIADOR 1 ======
-        const freq1 = (data.H100 / 100).toFixed(2);
-        const volt1 = data.H101.toFixed(0);
-        const amp1  = (data.H102 / 100).toFixed(2);
-        const pot1  = (data.H103 / 10).toFixed(2);
-        const status1 = data.Status1 || "DESCONOCIDO";
+        if (topic === topicVar) {
+            // ====== VARIADOR 1 ======
+            const freq1 = (data.H100 / 100).toFixed(2);
+            const volt1 = data.H101.toFixed(0);
+            const amp1  = (data.H102 / 100).toFixed(2);
+            const pot1  = (data.H103 / 10).toFixed(2);
+            const status1 = data.Status1 || "DESCONOCIDO";
 
-        estadoSpan.innerText     = status1;
-        potenciaSpan.innerText   = pot1 + " kW";
-        corrienteSpan.innerText  = amp1 + " A";
-        voltajeSpan.innerText    = volt1 + " V";
-        frecuenciaSpan.innerText = freq1 + " Hz";
+            estadoSpan.innerText     = status1;
+            potenciaSpan.innerText   = pot1 + " kW";
+            corrienteSpan.innerText  = amp1 + " A";
+            voltajeSpan.innerText    = volt1 + " V";
+            frecuenciaSpan.innerText = freq1 + " Hz";
 
-        // ====== VARIADOR 2 ======
-        const freq2 = (data.H200 / 100).toFixed(2);
-        const volt2 = data.H201.toFixed(0);
-        const amp2  = (data.H202 / 100).toFixed(2);
-        const pot2  = (data.H203 / 10).toFixed(2);
-        const status2 = data.Status2 || "DESCONOCIDO";
+            // ====== VARIADOR 2 ======
+            const freq2 = (data.H200 / 100).toFixed(2);
+            const volt2 = data.H201.toFixed(0);
+            const amp2  = (data.H202 / 100).toFixed(2);
+            const pot2  = (data.H203 / 10).toFixed(2);
+            const status2 = data.Status2 || "DESCONOCIDO";
 
-        estado2Span.innerText     = status2;
-        potencia2Span.innerText   = pot2 + " kW";
-        corriente2Span.innerText  = amp2 + " A";
-        voltaje2Span.innerText    = volt2 + " V";
-        frecuencia2Span.innerText = freq2 + " Hz";
+            estado2Span.innerText     = status2;
+            potencia2Span.innerText   = pot2 + " kW";
+            corriente2Span.innerText  = amp2 + " A";
+            voltaje2Span.innerText    = volt2 + " V";
+            frecuencia2Span.innerText = freq2 + " Hz";
 
-        // ====== SINCRONIZAR INPUT SOLO UNA VEZ ======
-        if (!sincronizadoProceso) {
-            const hmi_freq1 = (data.H105 / 100).toFixed(2);
-            const hmi_freq2 = (data.H205 / 100).toFixed(2);
+            // ====== SINCRONIZAR INPUT SOLO UNA VEZ ======
+            if (!sincronizadoProceso) {
+                const hmi_freq1 = (data.H105 / 100).toFixed(2);
+                const hmi_freq2 = (data.H205 / 100).toFixed(2);
 
-            inputFreqProceso.value = hmi_freq1;
-            inputFreq2Proceso.value = hmi_freq2;
+                inputFreqProceso.value = hmi_freq1;
+                inputFreq2Proceso.value = hmi_freq2;
 
-            sincronizadoProceso = true;
+                sincronizadoProceso = true;
 
-            console.log("🔄 Sincronizado FRECUENCIAS:", hmi_freq1, hmi_freq2);
+                console.log("🔄 Sincronizado FRECUENCIAS:", hmi_freq1, hmi_freq2);
+            }
+
+        } else if (topic === topicIO) {
+            // ====== DIAGNOSTICO RECTANGULOS ======
+            const h300 = data.H300;
+            const h301 = data.H301;
+            const h302 = data.H302;
+            const h303 = data.H303;
+            const h304 = data.H304;
+            const h305 = data.H305;
+
+            function setRectColor(rectId, valor) {
+                const rect = document.getElementById(rectId);
+                if (!rect) return;
+                rect.style.backgroundColor = valor ? "green" : "red";
+            }
+
+            // ENTRADAS
+            setRectColor("rect1", h300);
+            setRectColor("rect2", h301);
+            setRectColor("rect3", h302);
+            setRectColor("rect4", h303);
+
+            // SALIDAS
+            setRectColor("rect5", h304);
+            setRectColor("rect6", h305);
+            // ====== SINCRONIZAR INPUTS H308, H309, H310 SOLO UNA VEZ ======
+            if (!sincronizadoIO) {
+                const hmi_retardopresion = (data.H308 / 10).toFixed(1);
+                const hmi_presionminima  = (data.H309 / 100).toFixed(2);
+                const hmi_reintentos     = (data.H310 / 1).toFixed(0);
+
+                inputRetardoPresion.value = hmi_retardopresion;
+                inputPresionMinima.value  = hmi_presionminima;
+                inputReintentos.value     = hmi_reintentos;
+
+                sincronizadoIO = true;
+                console.log("🔄 Sincronizado I/O:", hmi_retardopresion, hmi_presionminima, hmi_reintentos);
+            }
         }
-
-        // ====== DIAGNOSTICO RECTANGULOS ======
-        const h300 = data.H300;
-        const h301 = data.H301;
-        const h302 = data.H302;
-        const h303 = data.H303;
-        const h304 = data.H304;
-        const h305 = data.H305;
-
-        function setRectColor(rectId, valor) {
-            const rect = document.getElementById(rectId);
-            if (!rect) return;
-            rect.style.backgroundColor = valor ? "green" : "red";
-        }
-
-        // ENTRADAS
-        setRectColor("rect1", h300);
-        setRectColor("rect2", h301);
-        setRectColor("rect3", h302);
-        setRectColor("rect4", h303);
-
-        // SALIDAS
-        setRectColor("rect5", h304);
-        setRectColor("rect6", h305);
 
     } catch(e) {
         console.error("Error parseando JSON:", e);
@@ -717,9 +749,15 @@ client.on("message", (topic, message) => {
 
 <script>
 const topicControl = "lurin/factory/bombas"; 
+
+// === INPUTS EXISTENTES VARIADOR 1 y 2 ===
 const inputFreqProceso = document.getElementById("inputFreqProceso");
 const inputFreq2Proceso = document.getElementById("inputFreq2Proceso");
 
+// === NUEVOS INPUTS PARAMETROS ===
+const inputRetardoPresion = document.getElementById("inputRetardoPresion");
+const inputPresionMinima  = document.getElementById("inputPresionMinima");
+const inputReintentos = document.getElementById("inputReintentos");
 
 // =======================
 //   LIMITES MIENTRAS ESCRIBE
@@ -741,6 +779,29 @@ inputFreq2Proceso.addEventListener("input", () => {
     if (v > 50) inputFreq2Proceso.value = 50;
 });
 
+// RETARDO DE PRESIÓN → 0.0–10.0
+inputRetardoPresion.addEventListener("input", () => {
+    let v = parseFloat(inputRetardoPresion.value);
+    if (isNaN(v)) return;
+    if (v < 0.0) inputRetardoPresion.value = 0.0;
+    if (v > 10.0) inputRetardoPresion.value = 10.0;
+});
+
+// PRESION MINIMA → 0.00–10.00
+inputPresionMinima.addEventListener("input", () => {
+    let v = parseFloat(inputPresionMinima.value);
+    if (isNaN(v)) return;
+    if (v < 0.00) inputPresionMinima.value = 0.00;
+    if (v > 10.00) inputPresionMinima.value = 10.00;
+});
+
+// CANTIDAD REINTENTOS → 1–10
+inputReintentos.addEventListener("input", () => {
+    let v = parseInt(inputReintentos.value);
+    if (isNaN(v)) return;
+    if (v < 1) inputReintentos.value = 1;
+    if (v > 10) inputReintentos.value = 10;
+});
 
 // =======================
 //   AL PERDER FOCO → FORMATEAR + PUBLICAR MQTT
@@ -775,7 +836,53 @@ inputFreq2Proceso.addEventListener("blur", () => {
         console.log("📤 VAR2 enviado:", msg);
     }
 });
+
+// RETARDO DE PRESIÓN → 0.0–10.0
+inputRetardoPresion.addEventListener("blur", () => {
+    let v = parseFloat(inputRetardoPresion.value);
+    if (isNaN(v)) v = 0.0;
+
+    v = Math.min(10.0, Math.max(0.0, v));
+    inputRetardoPresion.value = v.toFixed(1);
+
+    if (client.connected) {
+        const msg = "retardoPresion:" + v.toFixed(1);
+        client.publish(topicControl, msg);
+        console.log("📤 Retardo Presión enviado:", msg);
+    }
+});
+
+// PRESION MINIMA → 0.00–10.00
+inputPresionMinima.addEventListener("blur", () => {
+    let v = parseFloat(inputPresionMinima.value);
+    if (isNaN(v)) v = 0.00;
+
+    v = Math.min(10.00, Math.max(0.00, v));
+    inputPresionMinima.value = v.toFixed(2);
+
+    if (client.connected) {
+        const msg = "presionMinima:" + v.toFixed(2);
+        client.publish(topicControl, msg);
+        console.log("📤 Presión Mínima enviado:", msg);
+    }
+});
+
+// CANTIDAD REINTENTOS → 1–10
+inputReintentos.addEventListener("blur", () => {
+    let v = parseInt(inputReintentos.value);
+    if (isNaN(v)) v = 1;
+
+    v = Math.min(10, Math.max(1, v));
+    inputReintentos.value = v;
+
+    if (client.connected) {
+        const msg = "cantidadReintentos:" + v;
+        client.publish(topicControl, msg);
+        console.log("📤 Cantidad Reintentos enviado:", msg);
+    }
+});
 </script>
+
 
 </body>
 </html>
