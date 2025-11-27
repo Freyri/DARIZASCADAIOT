@@ -251,18 +251,17 @@ body {
   width: 100%;
   height: 100vh;
 }
-
+/* PC */
+#tanque1Img, #tanque2Img, #tanque3Img {
+  width: 165px;
+  height: 288.5px;
+}
 /* Media query para móvil */
 @media screen and (max-width: 768px) {
-  #esquemaImg {
-    width: 100vw;
-    height: 88vh;
-    object-fit: fill; /* estira sin respetar proporción */
-  }
 
   #tanque1Img, #tanque2Img, #tanque3Img {
-    width: 13%;     /* ancho relativo a la pantalla */
-    height: 37%;    /* estira verticalmente */
+    width: 9%;     /* ancho relativo a la pantalla */
+    height: 14%;    /* estira verticalmente */
   }
   #tanque1Img { left: 4%; top: 5%; }
   #tanque2Img { left: 36%; top: 5%; }
@@ -426,10 +425,9 @@ input[type=number] {
   </div>
 
   <!-- TANQUES -->
-  <img id="tanque1Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:12%; width:165px; height:288.5px;">
-  <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:26%; width:165px; height:288.5px;">
-  <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:78.6%; width:165px; height:288.5px;">
-
+  <img id="tanque1Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:12%;">
+  <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:26%;">
+  <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:78.6%;">
   <!-- CUADROS DE TEXTO -->
   <div class="textoProcesoBox" style="top: 43%; left: 24%;">
       <p class="textoProceso">MODO DE TRABAJO</p>
