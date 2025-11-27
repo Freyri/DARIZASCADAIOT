@@ -687,10 +687,35 @@ client.on("message", (topic, message) => {
             console.log("🔄 Sincronizado FRECUENCIAS:", hmi_freq1, hmi_freq2);
         }
 
+        // ====== DIAGNOSTICO RECTANGULOS ======
+        const h300 = data.H300;
+        const h301 = data.H301;
+        const h302 = data.H302;
+        const h303 = data.H303;
+        const h304 = data.H304;
+        const h305 = data.H305;
+
+        function setRectColor(rectId, valor) {
+            const rect = document.getElementById(rectId);
+            if (!rect) return;
+            rect.style.backgroundColor = valor ? "green" : "red";
+        }
+
+        // ENTRADAS
+        setRectColor("rect1", h300);
+        setRectColor("rect2", h301);
+        setRectColor("rect3", h302);
+        setRectColor("rect4", h303);
+
+        // SALIDAS
+        setRectColor("rect5", h304);
+        setRectColor("rect6", h305);
+
     } catch(e) {
         console.error("Error parseando JSON:", e);
     }
 });
+
 </script>
 
 <script>
