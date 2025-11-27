@@ -183,13 +183,13 @@ body {
 /* PC */
 #tanque1Img { top: 6.5%; left: 10%; width: 165px; height: 288.5px; }
 #tanque2Img { top: 6.5%; left: 24.7%; width: 165px; height: 288.5px; }
-#tanque3Img { top: 6.5%; left: 83%; width: 165px; height: 288.5px; }
+#tanque3Img { top: 6.5%; left: 80.1%; width: 165px; height: 288.5px; }
 
 /* MÓVIL */
 @media screen and (max-width: 768px) {
-  #tanque1Img { top: 16%; left: 10%; width: 13%; height: 36.3%; }
-  #tanque2Img { top: 16%; left: 25%; width: 13%; height: 36.3%; }
-  #tanque3Img { top: 16%; left: 76%; width: 13%; height: 36.3%; }
+  #tanque1Img { top: 15.9%; left: 10%; width: 13%; height: 36.3%; }
+  #tanque2Img { top: 15.9%; left: 25%; width: 13%; height: 36.3%; }
+  #tanque3Img { top: 15.9%; left: 83%; width: 13%; height: 36.3%; }
 }
 
 #esquemaImg {
@@ -427,8 +427,8 @@ input[type=number] {
   </div>
   <div id="rect7" class="rectangulo" style="top: 54%; left: 78%; width: 12%; height: 8%;">BOMBA 1</div>
   <div id="rect8" class="rectangulo" style="top: 69%; left: 78%; width: 12%; height: 8%;">BOMBA 2</div>
-  <div id="rect9" class="rectangulo" style="top: 54%; left: 23%; width: 12%; height: 8%;">BOMBA 1</div>
-  <div id="rect10" class="rectangulo" style="top: 69%; left: 23%; width: 12%; height: 8%;">BOMBA 2</div>
+  <div id="rect9" class="rectangulo" style="top: 54%; left: 25%; width: 9%; height: 6%; font-size:1.3vw;">AUTOMATICO</div>
+  <div id="rect10" class="rectangulo" style="top: 69%; left: 25%; width: 9%; height: 6%; font-size:1.3vw;">MANUAL</div>
 
   <!-- CUADROS DE TEXTO -->
   <div class="textoProcesoBox" style="top: 43%; left: 24%;">
@@ -741,6 +741,7 @@ client.on("message", (topic, message) => {
             const h305 = data.H305;
             const h306 = data.H306;
             const h307 = data.H307;
+	    const h311 = data.H311;
 	function setRectColor(rectId, valor, tanqueImgId) {
    	   const rect = document.getElementById(rectId);
    	   if (!rect) return;
@@ -766,7 +767,7 @@ client.on("message", (topic, message) => {
             setRectColor("rect7", h304);
             setRectColor("rect8", h305);
             setRectColor("rect9", h306);
-            setRectColor("rect10", h307);
+            setRectColor("rect10", h311);
             // ====== SINCRONIZAR INPUTS H308, H309, H310 SOLO UNA VEZ ======
             if (!sincronizadoIO) {
                 const hmi_retardopresion = (data.H308 / 10).toFixed(1);
