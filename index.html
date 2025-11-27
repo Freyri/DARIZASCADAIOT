@@ -245,14 +245,28 @@ body {
     font-size: 2.5vw;
   }
 }
+/* Contenedor relativo para que los top/left de los tanques funcionen */
+#procesoScreen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Media query para móvil */
 @media screen and (max-width: 768px) {
-  #tanque1Img, #tanque2Img, #tanque3Img {
-    width: 13%;      /* ancho relativo a la pantalla */
-    height: 35%;    /* mantiene proporción */
+  #esquemaImg {
+    width: 100vw;
+    height: 88vh;
+    object-fit: fill; /* estira sin respetar proporción */
   }
-  #tanque1Img { left: 4%; }
-  #tanque2Img { left: 36%; }
-  #tanque3Img { left: 74%; }
+
+  #tanque1Img, #tanque2Img, #tanque3Img {
+    width: 13%;     /* ancho relativo a la pantalla */
+    height: 37%;    /* estira verticalmente */
+  }
+  #tanque1Img { left: 4%; top: 5%; }
+  #tanque2Img { left: 36%; top: 5%; }
+  #tanque3Img { left: 74%; top: 5%; }
 }
 
 .textoProcesoBox {
@@ -410,12 +424,13 @@ input[type=number] {
   <div id="esquemaContainer">
       <img src="esquema.PNG" id="esquemaImg">
   </div>
-  <img id="tanque1Img" src="lleno.PNG" width="165" height="288.5" style="display:none; position:absolute; top:4.2%; left:12%;">
-  <img id="tanque2Img" src="lleno.PNG" width="165" height="288.5" style="display:none; position:absolute; top:4.2%; left:26%;">
-  <img id="tanque3Img" src="lleno.PNG" width="165" height="288.5" style="display:none; position:absolute; top:4.2%; left:78.6%;">
 
-  <!-- CUADRO DE TEXTO -->
+  <!-- TANQUES -->
+  <img id="tanque1Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:12%; width:165px; height:288.5px;">
+  <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:26%; width:165px; height:288.5px;">
+  <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute; top:4.2%; left:78.6%; width:165px; height:288.5px;">
 
+  <!-- CUADROS DE TEXTO -->
   <div class="textoProcesoBox" style="top: 43%; left: 24%;">
       <p class="textoProceso">MODO DE TRABAJO</p>
   </div>
@@ -424,6 +439,7 @@ input[type=number] {
       <p class="textoProceso">BOMBA DE SUMINISTRO</p>
   </div>
 </div>
+
 <div id="monitoreoScreen" class="screen">
   <!-- TITULOS DE VARIADORES -->
   <div class="textoProcesoBox" style="top: 3%; left: 16%;">
