@@ -566,7 +566,7 @@ input[type=number] {
      <p class="textoProcesoTransparente">s</p>
    </div>
   <div class="textoProcesoBoxTransparente" style="top: 40.2%; left: 69%;">
-     <p class="textoProcesoTransparente">bar</p>
+     <p class="textoProcesoTransparente">psi</p>
    </div>
 </div>
 
@@ -708,12 +708,12 @@ client.on("message", (topic, message) => {
             // ====== VARIADOR 2 ======
             const freq2 = (data.H200 / 100).toFixed(2);
             const volt2 = data.H201.toFixed(0);
-            const amp2  = (data.H202 / 100).toFixed(2);
+            const amp2  = (data.H202 / 10).toFixed(2);
             const pot2  = (data.H203 / 10).toFixed(2);
             const status2 = data.Status2 || "DESCONOCIDO";
 
             estado2Span.innerText     = status2;
-            potencia2Span.innerText   = pot2 + " kW";
+            potencia2Span.innerText   = pot2 + " %";
             corriente2Span.innerText  = amp2 + " A";
             voltaje2Span.innerText    = volt2 + " V";
             frecuencia2Span.innerText = freq2 + " Hz";
@@ -927,5 +927,6 @@ inputReintentos.addEventListener("blur", () => {
 </script>
 </body>
 </html>
+
 
 
