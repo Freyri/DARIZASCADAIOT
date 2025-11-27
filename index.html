@@ -554,7 +554,7 @@ input[type=number] {
   </div>
 
   <div class="textoProcesoBoxGrande" style="top: 40%; left: 60%; background: #FFFF00; width: 12vw;">
-      <input id="inputPresionMinima" type="number" min="0.00" max="10.00" step="0.01"
+      <input id="inputPresionMinima" type="number" min="0.00" max="145.00" step="0.01"
              style="width: 100%; height: 100%; font-size:2vw; font-weight:bold; text-align:center; border:none; background:#FFFF00; -moz-appearance:textfield; -webkit-appearance:none;">
   </div>
 
@@ -830,12 +830,12 @@ inputRetardoPresion.addEventListener("input", () => {
     if (v > 10.0) inputRetardoPresion.value = 10.0;
 });
 
-// PRESION MINIMA → 0.00–10.00
+// PRESION MINIMA → 0.00–145.00
 inputPresionMinima.addEventListener("input", () => {
     let v = parseFloat(inputPresionMinima.value);
     if (isNaN(v)) return;
     if (v < 0.00) inputPresionMinima.value = 0.00;
-    if (v > 10.00) inputPresionMinima.value = 10.00;
+    if (v > 145.00) inputPresionMinima.value = 145.00;
 });
 
 // CANTIDAD REINTENTOS → 1–10
@@ -895,12 +895,12 @@ inputRetardoPresion.addEventListener("blur", () => {
     }
 });
 
-// PRESION MINIMA → 0.00–10.00
+// PRESION MINIMA → 0.00–145.00 psi
 inputPresionMinima.addEventListener("blur", () => {
     let v = parseFloat(inputPresionMinima.value);
     if (isNaN(v)) v = 0.00;
 
-    v = Math.min(10.00, Math.max(0.00, v));
+    v = Math.min(145.00, Math.max(0.00, v));
     inputPresionMinima.value = v.toFixed(2);
 
     if (client.connected) {
