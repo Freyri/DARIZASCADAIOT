@@ -439,7 +439,7 @@ input[type=number] {
       </button>
 
       <button class="boton-mqtt rectangulo start" data-msg="startbomba1" 
-          style="top:51.5%; left:10%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:white;">
+          style="top:51.5%; left:10%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:black;">
           START
       </button>
       <button class="boton-mqtt rectangulo stop" data-msg="stopbomba1" 
@@ -448,7 +448,7 @@ input[type=number] {
       </button>
 
       <button class="boton-mqtt rectangulo start" data-msg="startbomba2" 
-          style="top:58%; left:45%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:white;">
+          style="top:58%; left:45%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:black;">
           START
       </button>
       <button class="boton-mqtt rectangulo stop" data-msg="stopbomba2" 
@@ -457,7 +457,7 @@ input[type=number] {
       </button>
 
       <button class="boton-mqtt rectangulo start" data-msg="startbomba3" 
-          style="top:5%; left:40%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:white;">
+          style="top:5%; left:40%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:black;">
           START
       </button>
       <button class="boton-mqtt rectangulo stop" data-msg="stopbomba3" 
@@ -477,6 +477,11 @@ input[type=number] {
       <button class="boton-mqtt rectangulo select" data-msg="selectbomba2" 
           style="top:69%; left:78%; width:12%; height:8%; font-size:1.3vw; background-color:transparent; color:white;">
       </button>
+	<div id="rectPresion" class="rectangulo"
+     	   style="top:41%; left:61%; width:10%; height:6%; font-size:1.3vw; background-color:transparent; color:black;">
+    	   <span id="presionpsi">psi</span>
+	</div>
+
   </div>
 
 
@@ -728,6 +733,7 @@ const corriente2Span = document.getElementById("corrienteValor2");
 const voltaje2Span = document.getElementById("voltajeValor2");
 const frecuencia2Span = document.getElementById("frecuenciaValor2");
 
+const presionpsiSpan = document.getElementById("presionpsi");
 client.on("connect", () => {
     console.log("Conectado a MQTT");
     client.subscribe(topicVar);
@@ -792,6 +798,8 @@ client.on("message", (topic, message) => {
             const h306 = data.H306;
             const h307 = data.H307;
 	    const h311 = data.H311;
+            const presionpsi = (data.H312 / 100).toFixed(2);
+	    presionpsiSpan.innerText = presionpsi + " psi";
 	function setRectColor(rectId, valor, tanqueImgId) {
    	   const rect = document.getElementById(rectId);
    	   if (!rect) return;
