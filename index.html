@@ -187,9 +187,9 @@ body {
 
 /* MÓVIL */
 @media screen and (max-width: 768px) {
-  #tanque1Img { top: 16%; left: 10.8%; width: 13%; height: 36.3%; }
-  #tanque2Img { top: 16%; left: 26%; width: 13%; height: 36.3%; }
-  #tanque3Img { top: 16%; left: 84.5%; width: 13%; height: 36.3%; }
+  #tanque1Img { top: 16%; left: 10%; width: 13%; height: 36.3%; }
+  #tanque2Img { top: 16%; left: 25%; width: 13%; height: 36.3%; }
+  #tanque3Img { top: 16%; left: 76%; width: 13%; height: 36.3%; }
 }
 
 #esquemaImg {
@@ -427,6 +427,9 @@ input[type=number] {
   </div>
   <div id="rect7" class="rectangulo" style="top: 54%; left: 78%; width: 12%; height: 8%;">BOMBA 1</div>
   <div id="rect8" class="rectangulo" style="top: 69%; left: 78%; width: 12%; height: 8%;">BOMBA 2</div>
+  <div id="rect9" class="rectangulo" style="top: 54%; left: 18%; width: 12%; height: 8%;">BOMBA 1</div>
+  <div id="rect10" class="rectangulo" style="top: 69%; left: 18%; width: 12%; height: 8%;">BOMBA 2</div>
+
   <!-- CUADROS DE TEXTO -->
   <div class="textoProcesoBox" style="top: 43%; left: 24%;">
       <p class="textoProceso">MODO DE TRABAJO</p>
@@ -736,7 +739,8 @@ client.on("message", (topic, message) => {
             const h303 = data.H303;
             const h304 = data.H304;
             const h305 = data.H305;
-
+            const h306 = data.H306;
+            const h307 = data.H307;
 	function setRectColor(rectId, valor, tanqueImgId) {
    	   const rect = document.getElementById(rectId);
    	   if (!rect) return;
@@ -761,6 +765,8 @@ client.on("message", (topic, message) => {
             setRectColor("rect6", h305);
             setRectColor("rect7", h304);
             setRectColor("rect8", h305);
+            setRectColor("rect9", h306);
+            setRectColor("rect10", h307);
             // ====== SINCRONIZAR INPUTS H308, H309, H310 SOLO UNA VEZ ======
             if (!sincronizadoIO) {
                 const hmi_retardopresion = (data.H308 / 10).toFixed(1);
