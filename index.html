@@ -599,7 +599,7 @@ input[type=number] {
        <p class="textoProcesoGrande">CANTIDAD DE REINTENTOS<br>POR FALTA DE PRESIÓN</p>
   </div>
   <div class="textoProcesoBoxGrande" style="top: 15%; left: 60%; background: #FFFF00; width: 12vw;">
-      <input id="inputRetardoPresion" type="number" min="0.0" max="10.0" step="0.1"
+      <input id="inputRetardoPresion" type="number" min="0.0" max="60.0" step="0.1"
              style="width: 100%; height: 100%; font-size:2vw; font-weight:bold; text-align:center; border:none; background:#FFFF00; -moz-appearance:textfield; -webkit-appearance:none;">
   </div>
 
@@ -871,7 +871,7 @@ inputRetardoPresion.addEventListener("input", () => {
     let v = parseFloat(inputRetardoPresion.value);
     if (isNaN(v)) return;
     if (v < 0.0) inputRetardoPresion.value = 0.0;
-    if (v > 10.0) inputRetardoPresion.value = 10.0;
+    if (v > 60.0) inputRetardoPresion.value = 60.0;
 });
 inputPresionMinima.addEventListener("input", () => {
     let v = parseFloat(inputPresionMinima.value);
@@ -907,7 +907,7 @@ inputFreq2Proceso.addEventListener("blur", () => {
 });
 inputRetardoPresion.addEventListener("blur", () => {
     let v = parseFloat(inputRetardoPresion.value) || 0.0;
-    v = Math.min(10.0, Math.max(0.0, v));
+    v = Math.min(60.0, Math.max(0.0, v));
     inputRetardoPresion.value = v.toFixed(1);
     if(client.connected){
         client.publish(topicControl, "retardoPresion:" + v.toFixed(1));
