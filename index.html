@@ -175,21 +175,23 @@ body {
 }
 
 /* Tanques posicionados relativos al contenedor del esquema */
-#tanque1Img, #tanque2Img, #tanque3Img {
+#tanque1Img, #tanque2Img, #tanque3Img, #alarmaImg {
   position: absolute;
   display: none;
 }
+
 
 /* PC */
 #tanque1Img { top: 6.5%; left: 10%; width: 165px; height: 288.5px; }
 #tanque2Img { top: 6.5%; left: 24.7%; width: 165px; height: 288.5px; }
 #tanque3Img { top: 6.5%; left: 80.1%; width: 165px; height: 288.5px; }
-
+#alarmaImg { top: 40%; left: 45%; width: 120px; height: 120px; }
 /* MÓVIL */
 @media screen and (max-width: 768px) {
   #tanque1Img { top: 15.9%; left: 10%; width: 13%; height: 36.3%; }
   #tanque2Img { top: 15.9%; left: 25%; width: 13%; height: 36.3%; }
   #tanque3Img { top: 15.9%; left: 79.8%; width: 13%; height: 36.3%; }
+  #alarmaImg { top: 18%; left: 45%; width: 12%; height: auto; }
 }
 
 #esquemaImg {
@@ -424,6 +426,7 @@ input[type=number] {
       <img id="tanque1Img" src="lleno.PNG" style="display:none; position:absolute;">
       <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute;">
       <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute;">
+      <img id="alarmaImg" src="alarma.PNG" style="display:none; position:absolute;">
   </div>
   <div id="rect7" class="rectangulo" style="top: 54%; left: 78%; width: 12%; height: 8%;">BOMBA 1</div>
   <div id="rect8" class="rectangulo" style="top: 69%; left: 78%; width: 12%; height: 8%;">BOMBA 2</div>
@@ -482,15 +485,15 @@ input[type=number] {
     	   <span id="presionpsi">psi</span>
 	</div>
 	<div id="rectV1" class="rectangulo" 
-	     style="top: 74%; left: 14.9%; width: 2%; height: 4.7%; border-radius:50%;">
+	     style="top: 74%; left: 14.9%; width: 2%; height: 4.5%; border-radius:50%;">
 	</div>
 
 	<div id="rectV2Y0" class="rectangulo" 
-	     style="top: 37.1%; left: 52.7%; width: 2%; height: 4.7%; border-radius:50%;">
+	     style="top: 37.1%; left: 52.7%; width: 2%; height: 4.5%; border-radius:50%;">
 	</div>
 
 	<div id="rectV2Y1" class="rectangulo" 
-	     style="top: 16%; left: 53.4%; width: 2%; height: 4.7%; border-radius:50%;">
+	     style="top: 16%; left: 53.4%; width: 2%; height: 4.5%; border-radius:50%;">
 	</div>
 
   </div>
@@ -745,6 +748,7 @@ const voltaje2Span = document.getElementById("voltajeValor2");
 const frecuencia2Span = document.getElementById("frecuenciaValor2");
 
 const presionpsiSpan = document.getElementById("presionpsi");
+const alarmaImg = document.getElementById("alarmaImg");
 client.on("connect", () => {
     console.log("Conectado a MQTT");
     client.subscribe(topicVar);
@@ -816,6 +820,12 @@ client.on("message", (topic, message) => {
 	    const h311 = data.H311;
             const presionpsi = (data.H312 / 100).toFixed(2);
 	    presionpsiSpan.innerText = presionpsi + " psi";
+
+	    if (h307 == 1) {
+  	    alarmaImg.style.display = "block";
+	    } else {
+            alarmaImg.style.display = "none";
+            }
             // ====== RECTÁNGULO 1 → SOLO STATUS V1 ======
             if (lastStatus1 === "ENCENDIDO") {
               rectV1.style.backgroundColor = "green";
@@ -991,7 +1001,6 @@ document.querySelectorAll('.boton-mqtt').forEach(btn => {
 </script>
 </body>
 </html>
-
 
 
 
