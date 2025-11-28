@@ -821,7 +821,7 @@ client.on("message", (topic, message) => {
             const presionpsi = (data.H312 / 100).toFixed(2);
 	    presionpsiSpan.innerText = presionpsi + " psi";
 
-	    if (h307 != 1) {
+	    if (h307 == 1) {
   	    alarmaImg.style.display = "block";
 	    } else {
             alarmaImg.style.display = "none";
