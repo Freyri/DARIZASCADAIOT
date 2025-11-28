@@ -481,6 +481,17 @@ input[type=number] {
      	   style="top:41%; left:61%; width:10%; height:6%; font-size:1.3vw; background-color:transparent; color:black;">
     	   <span id="presionpsi">psi</span>
 	</div>
+	<div id="rectV1" class="rectangulo" 
+	     style="top: 74%; left: 14%; width: 3%; height: 5%; border-radius:50%;">
+	</div>
+
+	<div id="rectV2Y0" class="rectangulo" 
+	     style="top: 37.1%; left: 52%; width: 3%; height: 5%; border-radius:50%;">
+	</div>
+
+	<div id="rectV2Y1" class="rectangulo" 
+	     style="top: 16%; left: 53.4%; width: 3%; height: 5%; border-radius:50%;">
+	</div>
 
   </div>
 
@@ -742,7 +753,8 @@ client.on("connect", () => {
 
 let sincronizadoProceso = false; // para las frecuencias
 let sincronizadoIO = false;      // para H308, H309, H310
-
+let lastStatus1 = "DESCONOCIDO";
+let lastStatus2 = "DESCONOCIDO";
 client.on("message", (topic, message) => {
     try {
         const data = JSON.parse(message.toString());
@@ -754,6 +766,7 @@ client.on("message", (topic, message) => {
             const amp1  = (data.H102 / 100).toFixed(2);
             const pot1  = (data.H103 / 10).toFixed(2);
             const status1 = data.Status1 || "DESCONOCIDO";
+            lastStatus1 = data.Status1;
 
             estadoSpan.innerText     = status1;
             potenciaSpan.innerText   = pot1 + " kW";
@@ -767,7 +780,7 @@ client.on("message", (topic, message) => {
             const amp2  = (data.H202 / 10).toFixed(2);
             const pot2  = (data.H203 / 10).toFixed(2);
             const status2 = data.Status2 || "DESCONOCIDO";
-
+            lastStatus2 = data.Status2;
             estado2Span.innerText     = status2;
             potencia2Span.innerText   = pot2 + " %";
             corriente2Span.innerText  = amp2 + " A";
@@ -788,6 +801,9 @@ client.on("message", (topic, message) => {
             }
 
         } else if (topic === topicIO) {
+            const rectV1  = document.getElementById("rectV1");
+            const rectV2Y0 = document.getElementById("rectV2Y0");
+            const rectV2Y1 = document.getElementById("rectV2Y1");
             // ====== DIAGNOSTICO RECTANGULOS ======
             const h300 = data.H300;
             const h301 = data.H301;
@@ -800,6 +816,26 @@ client.on("message", (topic, message) => {
 	    const h311 = data.H311;
             const presionpsi = (data.H312 / 100).toFixed(2);
 	    presionpsiSpan.innerText = presionpsi + " psi";
+            // ====== RECTÁNGULO 1 → SOLO STATUS V1 ======
+            if (lastStatus1 === "ENCENDIDO") {
+              rectV1.style.backgroundColor = "green";
+            } else {
+              rectV1.style.backgroundColor = "red";
+            }
+
+            // ====== RECTÁNGULO 2 → STATUS V2 + Y0 ======
+            if (lastStatus2 === "ENCENDIDO" && h304 == 1) {
+               rectV2Y0.style.backgroundColor = "green";
+            } else {
+               rectV2Y0.style.backgroundColor = "red";
+            }
+
+            // ====== RECTÁNGULO 3 → STATUS V2 + Y1 ======
+            if (lastStatus2 === "ENCENDIDO" && h305 == 1) {
+            rectV2Y1.style.backgroundColor = "green";
+            } else {
+                rectV2Y1.style.backgroundColor = "red";
+            }
 	function setRectColor(rectId, valor, tanqueImgId) {
    	   const rect = document.getElementById(rectId);
    	   if (!rect) return;
@@ -955,6 +991,7 @@ document.querySelectorAll('.boton-mqtt').forEach(btn => {
 </script>
 </body>
 </html>
+
 
 
 
