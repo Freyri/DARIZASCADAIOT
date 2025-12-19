@@ -29,10 +29,22 @@ body {
   align-items: center;
 }
 
-/* ========= LOGIN ========= */
-#loginScreen {
-  text-align: center;
+.screen {
+  display: none;
+  flex-direction: column; /* si usas flex */
+  width: 100%;
+  height: 100%;
 }
+
+#loginScreen {
+  display: flex; /* visible al inicio */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 
 #loginBox {
   padding: 20px;
@@ -81,17 +93,6 @@ body {
 }
 #loginBox button:hover { background: #0984e3; }
 
-/* ========= PANTALLAS ========= */
-.screen {
-  display: none;
-  width: 100%;
-  height: 100vh;
-  padding-bottom: 90px; /* espacio para el menú */
-  box-sizing: border-box;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
 /* ========= PANTALLA PRINCIPAL ========= */
 #mainScreen {
@@ -128,36 +129,7 @@ body {
   object-fit: contain;
 }
 
-/* ========= MENÚ FIJO ========== */
-#navMenu {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: transparent;   /* 👈 ahora es transparente */
-  padding: 8px;
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  box-sizing: border-box; 
-  visibility: hidden;
-}
 
-#navMenu button {
-  width: calc(19% - 25px); /* 5 botones → 20% cada uno */
-  padding: 14px 0;
-  background: #0f62fe;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  font-size: 1.6em;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-#navMenu button:hover {
-  background: #3d7dff;
-}
 /* Botones abajo del tanque */
 .tanqueBox button {
   display: block;
@@ -193,33 +165,6 @@ body {
   #alarmaImg { top: 27%; left: 64.5%; width: 5%; height: 8%; }
 }
 
-#esquemaImg {
-  width: 95vw;
-  max-width: 1500px;
-  height: 92vh; /* ⬅️ MÁS ALTO QUE TU PANTALLA */
-  object-fit: fill; /* ⬅️ estira sin respetar proporción */
-}
-/* === CUADROS CELESTES DIAGNÓSTICO === */
-.diagnosticoBox {
-  width: 40vw;                  /* ancho relativo */
-  height: 73vh;                 /* alto relativo */
-  background: #b5dcff;          /* celeste estilo HMI */
-  border: 1px solid #000;       /* borde negro */
-  border-radius: 3px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.25);
-  padding: 15px;
-  margin-top: 2.4%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.diagnosticoTitulo {
-  font-size: 2.2vw;
-  color: #0040ff;
-  font-weight: bold;
-  margin-top: 3px;   /* 👈 SUBE EL TEXTO */
-}
 /* Rectángulo flotante y responsive */
 .rectangulo {
     width: 7%;                   
@@ -235,30 +180,33 @@ body {
     transition: 0.3s ease;  
     position: absolute;     
 }
+.fullScreenContainer {
+    position: fixed;   /* se fija al viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;      /* 100% del ancho del viewport */
+    height: 100vh;     /* 100% del alto del viewport */
+    overflow: hidden;  /* evita scroll si algo sobresale */
+    z-index: 0;
+}
+
+.img-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 89%;
+    object-fit: fill; /* llena todo el contenedor, recorta si hace falta */
+    z-index: -1;       /* detrás de los botones */
+}
+
+.overlayImg {
+    position: absolute; /* ya estaban en inline-style, pero mejor CSS */
+    z-index: 1;         /* al frente del fondo */
+    object-fit: fill; /* mantiene proporciones de la imagen */
+}
 /* RESPONSIVO PARA MÓVIL */
 @media (max-width: 768px) {
-  #esquemaImg {
-    width: 95vw;      /* ocupa casi toda la pantalla */
-    height: 88vh; /* ⬅️ MÁS ALTO QUE TU PANTALLA */
-    max-width: none;
-  }
-  #esquemaContainer {
-    padding-top: 5%;
-  }
-  #navMenu button {
-    font-size: 1em;
-    padding: 10px 0;
-  }
-  .diagnosticoBox {
-    width: 35vw;   /* ocupa más ancho en móvil */
-    height: 70vh;  /* altura segura */
-    margin-top: 12vh;
-  }
-
-  .diagnosticoTitulo {
-    font-size: 4vw; /* ajusta tamaño texto */
-  }
-
   .rectangulo {
     width: 6vw; /* 10% del ancho de la pantalla */
     height: 10vh;
@@ -417,27 +365,24 @@ input[type=number] {
 <!-- ========== OTRAS PANTALLAS ========== -->
 
 <div id="procesoScreen" class="screen">
-  <!-- Contenedor relativo del esquema -->
-  <div id="esquemaContainer">
-      <img src="esquema.PNG" id="esquemaImg">
-
-      <!-- TANQUES dentro del mismo contenedor -->
-      <img id="tanque1Img" src="lleno.PNG" style="display:none; position:absolute;">
-      <img id="tanque2Img" src="lleno.PNG" style="display:none; position:absolute;">
-      <img id="tanque3Img" src="lleno.PNG" style="display:none; position:absolute;">
-      <img id="alarmaImg" src="alarma.PNG" style="display:none; position:absolute;">
+  <div class="fullScreenContainer">
+      <img src="esquema.PNG" class="img-container">
+      <img id="tanque1Img" src="lleno.PNG" class="overlayImg" style="display:none; top:5.8%; left:10%; width:12.8%; height:36.4%;">
+      <img id="tanque2Img" src="lleno.PNG" class="overlayImg" style="display:none; top:5.8%; left:25%; width:12.8%; height:36.4%;">
+      <img id="tanque3Img" src="lleno.PNG" class="overlayImg" style="display:none; top:5.8%; left:80%; width:12.8%; height:36.4%;">
+      <img id="alarmaImg" src="alarma.PNG" class="overlayImg" style="display:none; top:17%; left:65%; width:4%; height:8%;">
   </div>
-  <div id="rect7" class="rectangulo" style="top: 54%; left: 78%; width: 12%; height: 8%;">BOMBA 1</div>
-  <div id="rect8" class="rectangulo" style="top: 69%; left: 78%; width: 12%; height: 8%;">BOMBA 2</div>
-  <div id="rect9" class="rectangulo" style="top: 51.5%; left: 27%; width: 10%; height: 6%; font-size:1.3vw;">AUTOMATICO</div>
-  <div id="rect10" class="rectangulo" style="top: 64%; left: 27%; width: 10%; height: 6%; font-size:1.3vw;">MANUAL</div>
+  <div id="rect7" class="rectangulo" style="top: 59%; left: 78%; width: 12%; height: 8%;">BOMBA 1</div>
+  <div id="rect8" class="rectangulo" style="top: 74%; left: 78%; width: 12%; height: 8%;">BOMBA 2</div>
+  <div id="rect9" class="rectangulo" style="top: 58%; left: 27%; width: 10%; height: 6%; font-size:1.3vw;">AUTOMATICO</div>
+  <div id="rect10" class="rectangulo" style="top: 70.5%; left: 27%; width: 10%; height: 6%; font-size:1.3vw;">MANUAL</div>
   <div class="botones-container">
       <button class="boton-mqtt rectangulo automatico" data-msg="automatico" 
-          style="top:51.5%; left:27%; width:10%; height:6%; font-size:1.3vw; background-color: transparent; color:white;"
+          style="top:58%; left:27%; width:10%; height:6%; font-size:1.3vw; background-color: transparent; color:white;">
       </button>
 
       <button class="boton-mqtt rectangulo manual" data-msg="manual" 
-          style="top:64%; left:27%; width:10%; height:6%; font-size:1.3vw; background-color:transparent; color:white;">
+          style="top:70.5%; left:27%; width:10%; height:6%; font-size:1.3vw; background-color:transparent; color:white;">
       </button>
 
       <button class="boton-mqtt rectangulo start" data-msg="startbomba1" 
@@ -459,7 +404,7 @@ input[type=number] {
       </button>
 
       <button class="boton-mqtt rectangulo start" data-msg="startbomba3" 
-          style="top:5%; left:40%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:black;">
+          style="top:5%; left:42%; width:10%; height:6%; font-size:1.3vw; background-color:#00FF00; color:black;">
           START
       </button>
       <button class="boton-mqtt rectangulo stop" data-msg="stopbomba3" 
@@ -468,45 +413,46 @@ input[type=number] {
       </button>
 
       <button class="boton-mqtt rectangulo reintentar" data-msg="reintentar" 
-          style="top:58%; left:61%; width:10%; height:6%; font-size:1.3vw; background-color:#FFFF66; color:black;">
+          style="top:63%; left:61%; width:10%; height:6%; font-size:1.3vw; background-color:#FFFF66; color:black;">
           REINTENTAR
       </button>
 
       <button class="boton-mqtt rectangulo select" data-msg="selectbomba1" 
-          style="top:54%; left:78%; width:12%; height:8%; font-size:1.3vw; background-color:transparent; color:white;">
+          style="top:59%; left:78%; width:12%; height:8%; font-size:1.3vw; background-color:transparent; color:white;">
       </button>
 
       <button class="boton-mqtt rectangulo select" data-msg="selectbomba2" 
-          style="top:69%; left:78%; width:12%; height:8%; font-size:1.3vw; background-color:transparent; color:white;">
+          style="top:74%; left:78%; width:12%; height:8%; font-size:1.3vw; background-color:transparent; color:white;">
       </button>
-	<div id="rectPresion" class="rectangulo"
-     	   style="top:41%; left:61%; width:10%; height:6%; font-size:1.3vw; background-color:transparent; color:black;">
+
+    <div id="rectPresion" class="rectangulo"
+     	   style="top:46%; left:61%; width:10%; height:6%; font-size:1.3vw; background-color:transparent; color:black;">
     	   <span id="presionpsi">psi</span>
 	</div>
 	<div id="rectV1" class="rectangulo" 
-	     style="top: 74%; left: 14.9%; width: 2%; height: 4.5%; border-radius:50%;">
+	     style="top: 71.7%; left: 12%; width: 2%; height: 4.5%; border-radius:50%;">
 	</div>
 
 	<div id="rectV2Y0" class="rectangulo" 
-	     style="top: 37.1%; left: 52.7%; width: 2%; height: 4.5%; border-radius:50%;">
+	     style="top: 36.4%; left: 53%; width: 2%; height: 4.5%; border-radius:50%;">
 	</div>
 
 	<div id="rectV2Y1" class="rectangulo" 
-	     style="top: 14%; left: 53.4%; width: 2%; height: 4.5%; border-radius:50%;">
+	     style="top: 12.1%; left: 53.2%; width: 2%; height: 4.5%; border-radius:50%;">
 	</div>
 
   </div>
 
-
   <!-- CUADROS DE TEXTO -->
-  <div class="textoProcesoBox" style="top: 43%; left: 24%;">
+  <div class="textoProcesoBox" style="top: 48%; left: 25%;">
       <p class="textoProceso">MODO DE TRABAJO</p>
   </div>
 
-  <div class="textoProcesoBox" style="top: 43%; left: 76%;">
+  <div class="textoProcesoBox" style="top: 48%; left: 76%;">
       <p class="textoProceso">BOMBA DE SUMINISTRO</p>
   </div>
 </div>
+
 
 
 <div id="monitoreoScreen" class="screen">
@@ -638,52 +584,99 @@ input[type=number] {
    </div>
 </div>
 
-<div id="diagnosticoScreen" class="screen" 
-     style="flex-direction: row; justify-content: center; gap: 4vw;">
+<div id="diagnosticoScreen" class="screen">
+     <!-- Texto arriba de Entradas -->
+     <div class="rectangulo" 
+          style="top: 8%; left: 5%; width: 42%; height: 5%;
+                background: transparent; border: none; 
+                color: #0033CC; font-size: 2.4vw;
+                z-index: 1;">
+        ENTRADAS
+     </div>
 
-  <div class="diagnosticoBox">
-     <p class="diagnosticoTitulo">ENTRADAS</p>
-     <div id="rect1" class="rectangulo" style="top: 19%; left: 10%;">X0</div>
-     <div id="rect2" class="rectangulo" style="top: 36%; left: 10%;">X1</div>
-     <div id="rect3" class="rectangulo" style="top: 53%; left: 10%;">X2</div>
-     <div id="rect4" class="rectangulo" style="top: 70%; left: 10%;">X3</div>
-     <div class="textoProcesoBoxTransparente" style="top: 17%; left: 17.3%;">
+     <!-- Texto arriba de Salidas -->
+     <div class="rectangulo" 
+          style="top: 8%; left: 53%; width: 42%; height: 5%;
+                 background: transparent; border: none; 
+                 color: #0033CC; font-size: 2.4vw;
+                 z-index: 1;">
+         SALIDAS
+     </div>
+
+     <!-- Rectángulos de fondo para Entradas y Salidas -->
+     <div class="rectangulo" 
+          style="top: 5%; left: 5%; width: 39%; height: 80%; 
+                 background: #b5dcff; border: 1px solid #000; 
+                 z-index: 0;">
+     </div>
+
+     <div class="rectangulo" 
+          style="top: 5%; left: 53%; width: 39%; height: 80%; 
+                 background: #b5dcff; border: 1px solid #000; 
+                 z-index: 0;">
+     </div>
+
+     <div id="rect1" class="rectangulo" style="top: 19%; left: 8%;">X0</div>
+     <div id="rect2" class="rectangulo" style="top: 36%; left: 8%;">X1</div>
+     <div id="rect3" class="rectangulo" style="top: 53%; left: 8%;">X2</div>
+     <div id="rect4" class="rectangulo" style="top: 70%; left: 8%;">X3</div>
+
+     <div class="textoProcesoBoxTransparente" style="top: 17%; left: 15.3%;">
        <p class="textoProcesoTransparente">BOYA 1</p>
      </div>
-     <div class="textoProcesoBoxTransparente" style="top: 34%; left: 17.3%;">
+     <div class="textoProcesoBoxTransparente" style="top: 34%; left: 15.3%;">
        <p class="textoProcesoTransparente">BOYA 2</p>
      </div>
-     <div class="textoProcesoBoxTransparente" style="top: 51%; left: 17.3%;">
+     <div class="textoProcesoBoxTransparente" style="top: 51%; left: 15.3%;">
        <p class="textoProcesoTransparente">SOLICITUD (BOYA 3)</p>
      </div>
-     <div class="textoProcesoBoxTransparente" style="top: 68%; left: 17.3%;">
+     <div class="textoProcesoBoxTransparente" style="top: 68%; left: 15.3%;">
        <p class="textoProcesoTransparente">PARADA DE EMERGENCIA</p>
      </div>
-  </div>
 
-  <div class="diagnosticoBox">
-     <p class="diagnosticoTitulo">SALIDAS</p>
-     <div id="rect5" class="rectangulo" style="top: 19%; left: 53%;">Y0</div>
-     <div id="rect6" class="rectangulo" style="top: 36%; left: 53%;">Y1</div>
-     <div class="textoProcesoBoxTransparente" style="top: 17%; left: 60%;">
+     <div id="rect5" class="rectangulo" style="top: 19%; left: 56%;">Y0</div>
+     <div id="rect6" class="rectangulo" style="top: 36%; left: 56%;">Y1</div>
+     <div class="textoProcesoBoxTransparente" style="top: 17%; left: 63.3%;">
        <p class="textoProcesoTransparente">BOMBA IZQUIERDA</p>
      </div>
-     <div class="textoProcesoBoxTransparente" style="top: 34%; left: 60%;">
+     <div class="textoProcesoBoxTransparente" style="top: 34%; left: 63.3%;">
        <p class="textoProcesoTransparente">BOMBA DERECHA</p>
      </div>
-  </div>
+</div>
 
+<div id="navButtons" class="fullScreenContainer" style="display:none;">
+    <button class="rectangulo" 
+        style="top: 90%; left: 4.2%; width: 15%; height: 8%; background:#0f62fe; color:white; border-radius:3px; border:none; font-size:1.9vw; font-weight:bold; cursor:pointer;" 
+        onclick="showScreen('mainScreen')">
+        PRINCIPAL
+    </button>
+
+    <button class="rectangulo" 
+        style="top: 90%; left: 23.3%; width: 15%; height: 8%; background:#0f62fe; color:white; border-radius:3px; border:none; font-size:1.9vw; font-weight:bold; cursor:pointer;" 
+        onclick="showScreen('procesoScreen')">
+        PROCESO
+    </button>
+
+    <button class="rectangulo" 
+        style="top: 90%; left: 42.5%; width: 15%; height: 8%; background:#0f62fe; color:white; border-radius:3px; border:none; font-size:1.9vw; font-weight:bold; cursor:pointer;" 
+        onclick="showScreen('monitoreoScreen')">
+        MONITOREO
+    </button>
+
+    <button class="rectangulo" 
+        style="top: 90%; left: 61.7%; width: 15%; height: 8%; background:#0f62fe; color:white; border-radius:3px; border:none; font-size:1.9vw; font-weight:bold; cursor:pointer;" 
+        onclick="showScreen('parametrosScreen')">
+        PARAMETROS
+    </button>
+
+    <button class="rectangulo" 
+        style="top: 90%; left: 80.8%; width: 15%; height: 8%; background:#0f62fe; color:white; border-radius:3px; border:none; font-size:1.9vw; font-weight:bold; cursor:pointer;" 
+        onclick="showScreen('diagnosticoScreen')">
+        DIAGNOSTICO
+    </button>
 </div>
 
 
-<!-- ========== MENÚ FIJO ========== -->
-<div id="navMenu">
-  <button onclick="showScreen('mainScreen')">PRINCIPAL</button>
-  <button onclick="showScreen('procesoScreen')">PROCESO</button>
-  <button onclick="showScreen('monitoreoScreen')">MONITOREO</button>
-  <button onclick="showScreen('parametrosScreen')">PARAMETROS</button>
-  <button onclick="showScreen('diagnosticoScreen')">DIAGNOSTICO</button>
-</div>
 
 <script>
 function login() {
@@ -691,17 +684,19 @@ function login() {
   const pass = document.getElementById("password").value.trim();
 
   if (user === "dariza2025" && pass === "dariza2025iot") {
-
-      activarPantallaCompleta(); // <<<<<<<<<< FULL SCREEN
+      activarPantallaCompleta(); // FULL SCREEN
 
       document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("navMenu").style.visibility = "visible";
-      showScreen("mainScreen");
 
+      // Mostrar botones de navegación
+      document.getElementById("navButtons").style.display = "flex";
+
+      showScreen("mainScreen");
   } else {
       document.getElementById("mensaje").innerText = "Credenciales incorrectas";
   }
 }
+
 
 function showScreen(screenId) {
   const screens = [
@@ -1000,9 +995,6 @@ document.querySelectorAll('.boton-mqtt').forEach(btn => {
 </script>
 </body>
 </html>
-
-
-
 
 
 
