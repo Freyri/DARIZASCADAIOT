@@ -129,42 +129,6 @@ body {
   object-fit: contain;
 }
 
-
-/* Botones abajo del tanque */
-.tanqueBox button {
-  display: block;
-  margin-top: 5px;
-  width: 90%;  /* ocupa casi todo el ancho del tanque */
-}
-
-#esquemaContainer {
-  position: relative;
-  width: 95vw;
-  max-width: 1500px;
-  height: 92vh;
-  margin: 0 auto;
-}
-
-/* Tanques posicionados relativos al contenedor del esquema */
-#tanque1Img, #tanque2Img, #tanque3Img, #alarmaImg {
-  position: absolute;
-  display: none;
-}
-
-
-/* PC */
-#tanque1Img { top: 6.5%; left: 10%; width: 165px; height: 288.5px; }
-#tanque2Img { top: 6.5%; left: 24.7%; width: 165px; height: 288.5px; }
-#tanque3Img { top: 6.5%; left: 80.1%; width: 165px; height: 288.5px; }
-#alarmaImg { top: 18%; left: 65.1%; width: 48px; height: 65px; }
-/* MÓVIL */
-@media screen and (max-width: 768px) {
-  #tanque1Img { top: 15.9%; left: 10%; width: 13%; height: 36.3%; }
-  #tanque2Img { top: 15.9%; left: 25%; width: 13%; height: 36.3%; }
-  #tanque3Img { top: 15.9%; left: 79.8%; width: 13%; height: 36.3%; }
-  #alarmaImg { top: 27%; left: 64.5%; width: 5%; height: 8%; }
-}
-
 /* Rectángulo flotante y responsive */
 .rectangulo {
     width: 7%;                   
@@ -198,13 +162,15 @@ body {
     height: 89%;
     object-fit: fill; /* llena todo el contenedor, recorta si hace falta */
     z-index: -1;       /* detrás de los botones */
-	pointer-events: none;
 }
 
 .overlayImg {
     position: absolute; /* ya estaban en inline-style, pero mejor CSS */
     z-index: 1;         /* al frente del fondo */
     object-fit: fill; /* mantiene proporciones de la imagen */
+}
+.botones-container {
+    z-index: 10;
 }
 /* RESPONSIVO PARA MÓVIL */
 @media (max-width: 768px) {
@@ -996,8 +962,6 @@ document.querySelectorAll('.boton-mqtt').forEach(btn => {
 </script>
 </body>
 </html>
-
-
 
 
 
