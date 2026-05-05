@@ -322,8 +322,8 @@ client.on("message", (topic, message) => {
   }
 
   if (topic === topicPeso) {
-    pesoKG = parseFloat(data.kg);
-    pesoG  = parseFloat(data.g);
+    pesoKG = data.kg;
+    pesoG = data.g;
   }
 
 });
@@ -352,33 +352,28 @@ btnValidar.onclick = () => {
   }, 1000);
 };
 
+// 🔥🔥🔥 SOLO AQUÍ SE CORRIGIÓ 🔥🔥🔥
 function validarPeso() {
 
   const fila = document.querySelector(`tr[data-kardex="${articuloActual}"]`);
   if (!fila) return;
 
-  let cantidad = parseFloat(fila.children[3].innerText);
+  const cantidad = parseFloat(fila.children[3].innerText);
   const unidad = fila.children[4].innerText;
 
   let peso = (unidad === "kg") ? pesoKG : pesoG;
 
-  // 🔧 CORRECCIÓN: asegurar números y precisión
-  peso = parseFloat(peso);
-  cantidad = parseFloat(cantidad);
+  // 🔧 NORMALIZAR
+  peso = Number(peso);
+  const cantidadNorm = Number(cantidad);
 
-  let tolerancia = 1;
+  let tolerancia = (unidad === "kg") ? 0.1 : 1;
 
-  if (unidad === "kg") {
-    tolerancia = 0.1;
-  } else if (unidad === "g") {
-    tolerancia = 1;
-  }
+  // 🔥 EPSILON PARA BORDE EXACTO
+  const EPS = 0.00001;
+  const diferencia = Math.abs(peso - cantidadNorm);
 
-  // 🔧 CORRECCIÓN: evitar error de coma flotante
-  peso = parseFloat(peso.toFixed(2));
-  cantidad = parseFloat(cantidad.toFixed(2));
-
-  if (Math.abs(peso - cantidad) <= tolerancia) {
+  if (diferencia <= tolerancia + EPS) {
 
     fila.classList.remove("ok");
     fila.children[5].innerText = "✅";
@@ -403,11 +398,10 @@ function validarPeso() {
       fecha_validacion: fecha
     }));
 
-    // 🔥 ENVÍO A IMPRESORA (SOLO SI VALIDÓ OK)
     client.publish("dariza/print", JSON.stringify({
       lote: lote,
       producto: producto.innerText,
-      cantidad_planificada: fila.children[3].innerText,
+      cantidad_planificada: cantidad.innerText,
       kardex: articuloActual,
       articulo: fila.children[2].innerText,
       cantidad: fila.children[3].innerText + " " + fila.children[4].innerText,
@@ -424,7 +418,6 @@ function validarPeso() {
     mostrarMensaje(`❌ Peso incorrecto (${peso})`);
   }
 }
-
 // 🔥 REPORTE
 document.getElementById("btnReporte").onclick = () => {
 
