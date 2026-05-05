@@ -322,8 +322,8 @@ client.on("message", (topic, message) => {
   }
 
   if (topic === topicPeso) {
-    pesoKG = data.kg;
-    pesoG = data.g;
+    pesoKG = parseFloat(data.kg);
+    pesoG  = parseFloat(data.g);
   }
 
 });
@@ -357,10 +357,14 @@ function validarPeso() {
   const fila = document.querySelector(`tr[data-kardex="${articuloActual}"]`);
   if (!fila) return;
 
-  const cantidad = parseFloat(fila.children[3].innerText);
+  let cantidad = parseFloat(fila.children[3].innerText);
   const unidad = fila.children[4].innerText;
 
   let peso = (unidad === "kg") ? pesoKG : pesoG;
+
+  // 🔧 CORRECCIÓN: asegurar números y precisión
+  peso = parseFloat(peso);
+  cantidad = parseFloat(cantidad);
 
   let tolerancia = 1;
 
@@ -369,6 +373,10 @@ function validarPeso() {
   } else if (unidad === "g") {
     tolerancia = 1;
   }
+
+  // 🔧 CORRECCIÓN: evitar error de coma flotante
+  peso = parseFloat(peso.toFixed(2));
+  cantidad = parseFloat(cantidad.toFixed(2));
 
   if (Math.abs(peso - cantidad) <= tolerancia) {
 
@@ -394,17 +402,19 @@ function validarPeso() {
       kardex: articuloActual,
       fecha_validacion: fecha
     }));
+
     // 🔥 ENVÍO A IMPRESORA (SOLO SI VALIDÓ OK)
     client.publish("dariza/print", JSON.stringify({
       lote: lote,
       producto: producto.innerText,
-      cantidad_planificada: cantidad.innerText,
+      cantidad_planificada: fila.children[3].innerText,
       kardex: articuloActual,
       articulo: fila.children[2].innerText,
       cantidad: fila.children[3].innerText + " " + fila.children[4].innerText,
       peso: peso + " " + fila.children[4].innerText,
       fecha: fecha
     }));
+
     mostrarMensaje("✔ Validado", "green");
 
     articuloActual = null;
