@@ -347,8 +347,9 @@ input[type=number] {
       <img id="tanque3Img" src="lleno.PNG" class="overlayImg" style="display:none; top:5.8%; left:80%; width:12.8%; height:36.4%;">
       <img id="alarmaImg" src="alarma.PNG" class="overlayImg" style="display:none; top:17%; left:65%; width:4%; height:8%;">
   </div>
-  <div id="rect7" class="rectangulo" style="top: 59%; left: 78%; width: 12%; height: 8%;">BOMBA 1</div>
-  <div id="rect8" class="rectangulo" style="top: 74%; left: 78%; width: 12%; height: 8%;">BOMBA 2</div>
+  <div id="rect7" class="rectangulo" style="top: 59%; left: 78%; width: 12%; height: 8%; font-size:1.5vw;">BOMBA 1</div>
+  <div id="rect8" class="rectangulo" style="top: 74%; left: 78%; width: 12%; height: 8%; font-size:1.5vw;">BOMBA 2</div>
+  <div id="rect11" class="rectangulo" style="top: 74%; left: 60%; width: 12%; height: 8%; font-size:1.5vw;">ALTERNADO</div>
   <div id="rect9" class="rectangulo" style="top: 58%; left: 27%; width: 10%; height: 6%; font-size:1.3vw;">AUTOMATICO</div>
   <div id="rect10" class="rectangulo" style="top: 70.5%; left: 27%; width: 10%; height: 6%; font-size:1.3vw;">MANUAL</div>
   <div class="botones-container">
@@ -398,6 +399,10 @@ input[type=number] {
 
       <button class="boton-mqtt rectangulo select" data-msg="selectbomba2" 
           style="top:74%; left:78%; width:12%; height:8%; font-size:1.3vw; background-color:transparent; color:white;">
+      </button>
+
+      <button class="boton-mqtt rectangulo select" data-msg="selectalternado" 
+          style="top:74%; left:60%; width:12%; height:8%; font-size:1.3vw; background-color:transparent; color:white;">
       </button>
 
     <div id="rectPresion" class="rectangulo"
@@ -786,7 +791,8 @@ client.on("message", (topic, message) => {
             const h305 = data.H305;
             const h306 = data.H306;
             const h307 = data.H307;
-	    const h311 = data.H311;
+	          const h311 = data.H311;
+            const h313 = data.H313;
             const presionpsi = (data.H312 / 100).toFixed(2);
 	    presionpsiSpan.innerText = presionpsi + " psi";
 
@@ -841,6 +847,7 @@ client.on("message", (topic, message) => {
             setRectColor("rect8", h305);
             setRectColor("rect9", h306);
             setRectColor("rect10", h311);
+            setRectColor("rect11", h313);
             // ====== SINCRONIZAR INPUTS H308, H309, H310 SOLO UNA VEZ ======
             if (!sincronizadoIO) {
                 const hmi_retardopresion = (data.H308 / 10).toFixed(1);
